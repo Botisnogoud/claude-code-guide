@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Updates — Claude Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: rgba(0,212,255,0.12);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .filter-btn[data-filter="release"].active { background:rgba(16,185,129,0.12); border-color:var(--accent-green); color:var(--accent-green); }
+    .filter-btn[data-filter="feature"].active { background:rgba(0,212,255,0.12); border-color:var(--accent-cyan); color:var(--accent-cyan); }
+    .filter-btn[data-filter="update"].active  { background:rgba(124,58,237,0.12); border-color:var(--accent-purple); color:var(--accent-purple); }
+    .filter-btn[data-filter="security"].active { background:rgba(239,68,68,0.12); border-color:var(--accent-red); color:var(--accent-red); }
+    .filter-btn[data-filter="community"].active { background:rgba(245,158,11,0.12); border-color:var(--accent-orange); color:var(--accent-orange); }
+
+    .updates-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<button class="menu-toggle">☰</button>
+<div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">C</div>
+      <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Basic Setup</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Home & Setup</a>
+      <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <div class="sidebar-daily" id="sd-setup">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
+          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-setup" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Best Practices</div>
+      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
+      <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Security Settings</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> Custom Agents</a>
+      <a href="tokens.html"><span class="nav-icon">💰</span> Token Optimization</a>
+      <div class="sidebar-daily" id="sd-practices">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
+          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-practices" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">News & Updates</div>
+      <a href="updates.html" class="active"><span class="nav-icon">📰</span> Daily Updates</a>
+      <div class="sidebar-daily" id="sd-news">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
+          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-news" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-badge"><span class="pulse-dot"></span> &nbsp;Updated Daily</div>
+      <h1 class="hero-title">Claude Code<br>Latest Updates</h1>
+      <p class="hero-desc">Stay ahead with the latest releases, features, security updates, and community highlights from the Claude Code ecosystem.</p>
+    </section>
+
+    <div class="content-area">
+
+      <section class="section">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">News Feed</span></div>
+        <div class="updates-header" data-aos="fade-up">
+          <h2 class="section-title" style="margin-bottom:0">Recent Developments</h2>
+          <div class="live-badge">
+            <span class="pulse-dot"></span>
+            Curated · March 2026
+          </div>
+        </div>
+
+        <!-- Weekly Digest -->
+        <div class="digest-box" data-aos="fade-up">
+          <div class="digest-title">📋 This Week's Highlights</div>
+          <div class="digest-items">
+            <div class="digest-item"><span class="digest-dot"></span>Claude Sonnet 4.5 released — new context editing and agent memory features, best SWE-bench scores yet</div>
+            <div class="digest-item"><span class="digest-dot"></span>VS Code extension surpassed 100k installs in its first week of availability</div>
+            <div class="digest-item"><span class="digest-dot"></span>Community benchmark: Claude Code leads on multi-file refactoring tasks vs Cursor and Copilot</div>
+            <div class="digest-item"><span class="digest-dot"></span>Security advisory issued for prompt injection via CSV/API data — updated defenses published</div>
+            <div class="digest-item"><span class="digest-dot"></span>Reddit thread: Multi-agent pipeline running 3 months with 94% auto-approval rate</div>
+          </div>
+        </div>
+
+        <!-- Category Filter Bar -->
+        <div class="filter-bar" data-aos="fade-up">
+          <button class="filter-btn active" data-filter="all">🌐 All</button>
+          <button class="filter-btn" data-filter="release">🚀 Releases</button>
+          <button class="filter-btn" data-filter="feature">✨ Features</button>
+          <button class="filter-btn" data-filter="update">🔄 Updates</button>
+          <button class="filter-btn" data-filter="security">🔒 Security</button>
+          <button class="filter-btn" data-filter="community">🎉 Community</button>
+        </div>
+
+        <!-- Source Filter Bar -->
+        <div class="filter-bar" style="margin-top:-16px;margin-bottom:24px" data-aos="fade-up">
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-right:4px;align-self:center">Source:</span>
+          <button class="filter-btn active" data-source="all" style="font-size:0.75rem;padding:5px 12px">All Sources</button>
+          <button class="filter-btn" data-source="official" style="font-size:0.75rem;padding:5px 12px">🔵 Official</button>
+          <button class="filter-btn" data-source="reddit" style="font-size:0.75rem;padding:5px 12px">🟠 Reddit</button>
+          <button class="filter-btn" data-source="blog" style="font-size:0.75rem;padding:5px 12px">🟣 Blog</button>
+          <button class="filter-btn" data-source="community" style="font-size:0.75rem;padding:5px 12px">🟡 Community</button>
+          <button class="filter-btn" data-source="benchmark" style="font-size:0.75rem;padding:5px 12px">🟢 Benchmark</button>
+        </div>
+
+        <!-- News Feed rendered by JS -->
+        <div id="news-feed" class="news-feed">
+          <!-- Loading skeleton -->
+          <div class="skeleton" style="height:90px;margin-bottom:16px"></div>
+          <div class="skeleton" style="height:90px;margin-bottom:16px"></div>
+          <div class="skeleton" style="height:90px;margin-bottom:16px"></div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Resources -->
+      <section class="section">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Resources</span></div>
+        <h2 class="section-title" data-aos="fade-up">Official Sources</h2>
+        <div class="card-grid" data-aos="fade-up">
+          <div class="card">
+            <span class="card-icon">📚</span>
+            <div class="card-title">Official Docs</div>
+            <div class="card-body">The authoritative source for all Claude Code features, API reference, and configuration.</div>
+            <div style="margin-top:12px"><span class="badge badge-cyan">code.claude.com/docs</span></div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🧪</span>
+            <div class="card-title">Release Notes</div>
+            <div class="card-body">Detailed changelogs for every version including breaking changes and migration guides.</div>
+            <div style="margin-top:12px"><span class="badge badge-purple">platform.claude.com/release-notes</span></div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🐙</span>
+            <div class="card-title">GitHub Community</div>
+            <div class="card-body">Community agents, skills, CLAUDE.md templates, and discussions.</div>
+            <div style="margin-top:12px"><span class="badge badge-green">github.com/anthropics/claude-code</span></div>
+          </div>
+          <div class="card">
+            <span class="card-icon">📝</span>
+            <div class="card-title">Anthropic Blog</div>
+            <div class="card-body">In-depth technical posts about new capabilities and research behind Claude.</div>
+            <div style="margin-top:12px"><span class="badge badge-orange">anthropic.com/news</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Contributing -->
+      <section class="section">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Contribute</span></div>
+        <h2 class="section-title" data-aos="fade-up">Add to This Page</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-bottom:24px" data-aos="fade-up">
+          This page is powered by <code>assets/data/updates.json</code>. To add a new update, simply add an entry to that file and redeploy.
+        </p>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">json — full entry schema</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-json">{
+  "date": "2026-03-04",
+  "category": "feature",
+  "source": "community",
+  "sourceUrl": "https://reddit.com/r/ClaudeAI/...",
+  "readTime": "5 min",
+  "title": "Your Update Title",
+  "icon": "✨",
+  "excerpt": "Brief description shown in the card preview (1-2 sentences).",
+  "content": "Detailed HTML shown when 'Read more' is expanded. Supports &lt;code&gt; and &lt;strong&gt; tags."
+}</code></pre>
+        </div>
+        <div class="callout callout-info" style="margin-top:16px" data-aos="fade-up">
+          <span class="callout-icon">💡</span>
+          <div>
+            <strong>Categories:</strong> <code>release</code>, <code>feature</code>, <code>update</code>, <code>security</code>, <code>community</code><br>
+            <strong>Sources:</strong> <code>official</code>, <code>reddit</code>, <code>blog</code>, <code>community</code>, <code>benchmark</code><br>
+            Both fields control badge colors and source filter buttons on this page.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

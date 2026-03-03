@@ -1,0 +1,127 @@
+{
+  "setup": [
+    {
+      "day": "Monday",
+      "tip": "Start every project with <code>claude init</code> to auto-generate a CLAUDE.md scaffold based on your repo.",
+      "example": "claude init",
+      "link": "claude-md.html"
+    },
+    {
+      "day": "Tuesday",
+      "tip": "Use <code>claude --model claude-haiku-4-5-20251001</code> for quick boilerplate tasks — it's 10× faster and cheaper.",
+      "example": "claude --model claude-haiku-4-5-20251001 \"generate getters and setters for User.ts\"",
+      "link": "tokens.html"
+    },
+    {
+      "day": "Wednesday",
+      "tip": "Authenticate once with OAuth and never worry about token rotation. Requires Pro/Max/Team plan.",
+      "example": "claude setup-token",
+      "link": "github.html"
+    },
+    {
+      "day": "Thursday",
+      "tip": "Pin your Node.js version in <code>.nvmrc</code> so Claude always uses the same runtime as your project.",
+      "example": "echo '18.19.0' > .nvmrc",
+      "link": null
+    },
+    {
+      "day": "Friday",
+      "tip": "Run <code>claude --version</code> to confirm your install, then <code>claude update</code> to get the latest.",
+      "example": "claude update",
+      "link": null
+    },
+    {
+      "day": "Saturday",
+      "tip": "The <code>~/.claude/settings.json</code> file sets your global defaults across all projects — set your preferred model there.",
+      "example": "{ \"env\": { \"ANTHROPIC_SMALL_FAST_MODEL\": \"claude-haiku-4-5-20251001\" } }",
+      "link": "security.html"
+    },
+    {
+      "day": "Sunday",
+      "tip": "Use <code>claude --print</code> flag for non-interactive output — great for piping Claude's response to a file or another command.",
+      "example": "claude --print \"summarize this codebase\" > summary.txt",
+      "link": null
+    }
+  ],
+  "practices": [
+    {
+      "day": "Monday",
+      "tip": "Name your Skills with gerunds (WritingTests.md not tests.md) — Claude triggers them more reliably.",
+      "example": "mkdir -p .claude/skills && touch .claude/skills/WritingTests.md",
+      "link": "skills.html"
+    },
+    {
+      "day": "Tuesday",
+      "tip": "Put non-obvious architecture decisions in CLAUDE.md, not obvious ones. Claude already knows React — explain YOUR patterns.",
+      "example": "## Why We Use Server Components\\nWe avoid 'use client' unless absolutely necessary to maximize ISR caching.",
+      "link": "claude-md.html"
+    },
+    {
+      "day": "Wednesday",
+      "tip": "Use <code>deny: [\"Bash(rm -rf*)\", \"Bash(sudo *)\"]</code> in settings.json to protect against accidental destructive commands.",
+      "example": "{ \"permissions\": { \"deny\": [\"Bash(rm -rf*)\"] } }",
+      "link": "security.html"
+    },
+    {
+      "day": "Thursday",
+      "tip": "Give agents the minimum tools they need. A code reviewer only needs Read, Glob, Grep — never Write access.",
+      "example": "tools:\\n  - Read\\n  - Glob\\n  - Grep",
+      "link": "agents.html"
+    },
+    {
+      "day": "Friday",
+      "tip": "Run <code>/compact</code> before switching to a new task in the same session — saves 5k–20k tokens instantly.",
+      "example": "/compact \"fixed the auth bug, now starting on payments\"",
+      "link": "tokens.html"
+    },
+    {
+      "day": "Saturday",
+      "tip": "Use <code>@imports</code> in CLAUDE.md to reference your schema files — Claude reads them automatically at session start.",
+      "example": "See @prisma/schema.prisma for the database schema.",
+      "link": "claude-md.html"
+    },
+    {
+      "day": "Sunday",
+      "tip": "Scope MCP filesystem servers to specific directories — never grant root access to an MCP server.",
+      "example": "args: [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/allowed/path\"]",
+      "link": "security.html"
+    }
+  ],
+  "news": [
+    {
+      "day": "Monday",
+      "tip": "Claude Sonnet 4.5 is now the recommended model for Claude Code — best coding performance on SWE-bench to date.",
+      "link": "updates.html"
+    },
+    {
+      "day": "Tuesday",
+      "tip": "The Checkpoints feature lets you save session state with <code>/checkpoint save</code> and roll back instantly — no more lost work.",
+      "link": "updates.html"
+    },
+    {
+      "day": "Wednesday",
+      "tip": "VS Code extension hit 100k+ installs in its first week — native inline diffs and sidebar chat now available.",
+      "link": "updates.html"
+    },
+    {
+      "day": "Thursday",
+      "tip": "OpusPlan mode auto-routes planning tasks to Opus and implementation to Sonnet — cutting costs 40–60% automatically.",
+      "link": "updates.html"
+    },
+    {
+      "day": "Friday",
+      "tip": "The MCP Marketplace now has 100+ pre-built servers — install postgres, stripe, or puppeteer with one command.",
+      "link": "updates.html"
+    },
+    {
+      "day": "Saturday",
+      "tip": "Claude Code Security Scanner (preview) reasons about vulnerabilities like a human researcher — auto-suggests patches too.",
+      "link": "updates.html"
+    },
+    {
+      "day": "Sunday",
+      "tip": "The community awesome-claude-code-subagents repo has 3,000+ stars and 200+ ready-to-use agent definitions.",
+      "link": "updates.html"
+    }
+  ]
+}

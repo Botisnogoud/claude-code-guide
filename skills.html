@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills Best Practices — Claude Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<button class="menu-toggle">☰</button>
+<div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">C</div>
+      <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Basic Setup</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Home & Setup</a>
+      <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <div class="sidebar-daily" id="sd-setup">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
+          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-setup" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Best Practices</div>
+      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
+      <a href="skills.html" class="active"><span class="nav-icon">⚡</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Security Settings</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> Custom Agents</a>
+      <a href="tokens.html"><span class="nav-icon">💰</span> Token Optimization</a>
+      <div class="sidebar-daily" id="sd-practices">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
+          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-practices" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">News & Updates</div>
+      <a href="updates.html"><span class="nav-icon">📰</span> Daily Updates</a>
+      <div class="sidebar-daily" id="sd-news">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
+          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-news" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-badge">⚡ Extensibility</div>
+      <h1 class="hero-title">Skills<br>Best Practices</h1>
+      <p class="hero-desc">Skills extend Claude Code with specialized capabilities — automatically triggered when relevant, loaded on-demand to save tokens. Build them right and gain superpowers.</p>
+    </section>
+
+    <div class="content-area">
+
+      <!-- What are Skills -->
+      <section class="section" id="what">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Overview</span></div>
+        <h2 class="section-title" data-aos="fade-up">What Are Skills?</h2>
+        <p class="section-subtitle" data-aos="fade-up">Skills are markdown files with YAML metadata that teach Claude how to perform specialized tasks — from writing tests to deploying code.</p>
+
+        <div class="card-grid" data-aos="fade-up">
+          <div class="card">
+            <span class="card-icon">🎯</span>
+            <div class="card-title">Auto-Triggered</div>
+            <div class="card-body">Claude detects when to use a skill from your message context. No manual invocation needed.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">💾</span>
+            <div class="card-title">Token-Efficient</div>
+            <div class="card-body">Only the YAML metadata loads at start. Full skill content loads only when the skill is needed — saving ~82% of tokens.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🗂️</span>
+            <div class="card-title">Two Locations</div>
+            <div class="card-body"><code>~/.claude/skills/</code> (global) or <code>.claude/skills/</code> (project). Both are loaded automatically.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🔄</span>
+            <div class="card-title">Living Documents</div>
+            <div class="card-body">Update skills as your workflows evolve. They're just markdown — easy to version control and share.</div>
+          </div>
+        </div>
+
+        <details class="eli5-card" style="margin-top:32px" data-aos="fade-up">
+          <summary><span class="eli5-icon">🧒</span> ELI5 — What's a Skill? <span class="eli5-chevron">▼</span></summary>
+          <div class="eli5-body">
+            <p>Imagine you taught your robot helper how to bake a cake. You wrote down all the steps: what ingredients, what temperature, how long. Now every time you say "bake a cake," the robot knows exactly what to do without you explaining each step again.</p>
+            <div class="eli5-analogy">A Skill is that written recipe. When you ask Claude to "write tests for this function," Claude checks if you have a "WritingTests" skill — and if so, follows your specific instructions for how to write tests in your project (your test framework, naming conventions, coverage rules, etc.).</div>
+          </div>
+        </details>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- File Structure -->
+      <section class="section" id="structure">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">File Format</span></div>
+        <h2 class="section-title" data-aos="fade-up">Skill File Structure</h2>
+        <p class="section-subtitle" data-aos="fade-up">Every skill is a markdown file with a YAML frontmatter block that tells Claude when and how to use it.</p>
+
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">markdown — .claude/skills/WritingTests.md</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-markdown">---
+name: WritingTests
+description: >
+  Use this skill when the user asks to write, add, create, or generate
+  tests, unit tests, integration tests, or test cases for any code.
+  Also triggers when fixing failing tests or improving test coverage.
+version: 1.0
+author: your-team
+---
+
+# Writing Tests
+
+## Overview
+This skill writes Jest + React Testing Library tests following our project conventions.
+
+## Prerequisites
+- Ensure the file under test is fully implemented
+- Check that Jest config is in `jest.config.js`
+
+## Test File Location
+- Component tests: `src/components/__tests__/ComponentName.test.tsx`
+- Utility tests: `src/lib/__tests__/utilName.test.ts`
+- API tests: `src/api/__tests__/routeName.test.ts`
+
+## Test Structure Template
+```typescript
+import { render, screen, userEvent } from '@testing-library/react'
+import { ComponentName } from '../ComponentName'
+
+describe('ComponentName', () => {
+  it('renders correctly', () => {
+    render(&lt;ComponentName /&gt;)
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
+
+  it('handles user interaction', async () => {
+    const user = userEvent.setup()
+    render(&lt;ComponentName /&gt;)
+    await user.click(screen.getByRole('button'))
+    expect(screen.getByText('Clicked!')).toBeInTheDocument()
+  })
+})
+```
+
+## Coverage Requirements
+- Minimum 80% line coverage for new files
+- 100% coverage for business logic utilities
+- Test happy path, error states, and edge cases
+
+## Run Tests
+```bash
+npm test -- --testPathPattern=ComponentName
+```</code></pre>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Best Practices -->
+      <section class="section" id="practices">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Best Practices</span></div>
+        <h2 class="section-title" data-aos="fade-up">Creating Great Skills</h2>
+
+        <div class="steps">
+          <div class="step" data-aos="fade-up">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Use Gerund Names (verb + -ing)</div>
+              <div class="step-body">Name your skill file after the activity it performs. This helps Claude trigger it correctly.</div>
+              <div class="do-dont" style="margin-top:12px">
+                <div class="card do-card"><div class="card-label">✅ Good Names</div><code>WritingTests.md</code><br><code>ReviewingCode.md</code><br><code>DeployingToProduction.md</code><br><code>MigratingDatabase.md</code></div>
+                <div class="card dont-card"><div class="card-label">❌ Bad Names</div><code>tests.md</code><br><code>code-review.md</code><br><code>deploy.md</code><br><code>db-stuff.md</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="100">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Write "Pushy" Descriptions</div>
+              <div class="step-body">Claude tends to under-trigger skills. Make your description assertive about when the skill should activate.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">yaml — description examples</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-yaml"># Too vague — won't trigger reliably
+description: "For writing tests"
+
+# Better — specific triggers, assertive language
+description: >
+  ALWAYS use this skill when the user asks to write, add, create,
+  generate, or fix any kind of test, spec, or test case.
+  Also use when improving test coverage or running tests.</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Use Progressive Disclosure</div>
+              <div class="step-body">Put general steps first, detailed examples later. Claude reads until it has enough — this saves tokens.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">markdown — structure order</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-markdown"># Skill Name
+## Overview (1-2 sentences)
+## Prerequisites
+## Steps (high-level, actionable)
+## Templates / Examples (detailed)
+## Edge Cases (rarely needed)</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="300">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">One Skill Per Activity</div>
+              <div class="step-body">Don't make a giant "coding" skill. Split into <code>WritingTests.md</code>, <code>ReviewingCode.md</code>, <code>RefactoringCode.md</code>. Smaller skills load faster and trigger more precisely.</div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="400">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Reference Files, Don't Duplicate</div>
+              <div class="step-body">If your skill needs templates, put them in separate files and reference them. Keeps skills clean.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">markdown</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-markdown">## Templates
+See @.claude/templates/test-template.tsx for the standard test file structure.
+See @.claude/templates/component-template.tsx for new component structure.</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Real Examples -->
+      <section class="section" id="examples">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Examples</span></div>
+        <h2 class="section-title" data-aos="fade-up">Ready-to-Use Skill Examples</h2>
+
+        <h3 style="margin-bottom:14px;color:var(--text-primary);font-size:1.1rem" data-aos="fade-up">1. ReviewingCode.md</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">markdown</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-markdown">---
+name: ReviewingCode
+description: >
+  Use this skill when asked to review, audit, check, or improve code quality.
+  Also triggers for security reviews, performance checks, and refactoring suggestions.
+---
+
+## Code Review Checklist
+1. **Correctness**: Does the logic match the intent?
+2. **Security**: SQL injection, XSS, auth bypass, hardcoded secrets?
+3. **Performance**: N+1 queries, unnecessary re-renders, blocking operations?
+4. **Types**: TypeScript types correct? No `any`?
+5. **Tests**: Are edge cases covered?
+6. **Readability**: Clear naming? Appropriate comments?
+
+## Output Format
+Structure your review as:
+- 🔴 **Critical** — must fix before merge
+- 🟡 **Warning** — should fix soon
+- 🟢 **Suggestion** — nice to have improvement</code></pre>
+        </div>
+
+        <h3 style="margin:32px 0 14px;color:var(--text-primary);font-size:1.1rem" data-aos="fade-up">2. CreatingPRDescription.md</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">markdown</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-markdown">---
+name: CreatingPRDescription
+description: >
+  Use this when asked to create, write, or generate a pull request description,
+  PR body, changelog entry, or commit message. Triggers on "write PR", "create PR description".
+---
+
+## PR Template
+```markdown
+## Summary
+Brief description of what changed and why.
+
+## Changes
+- Bullet point each significant change
+- Be specific about what was modified
+
+## Testing
+- [ ] Unit tests pass
+- [ ] Manual testing completed on [device/environment]
+- [ ] No regressions in related features
+
+## Screenshots (if UI changes)
+[Add before/after if applicable]
+```
+
+## Commit Format
+`type(scope): description`
+Types: feat | fix | docs | refactor | test | chore</code></pre>
+        </div>
+
+        <h3 style="margin:32px 0 14px;color:var(--text-primary);font-size:1.1rem" data-aos="fade-up">3. DeployingToProduction.md</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">markdown — .claude/skills/DeployingToProduction.md</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-markdown">---
+name: DeployingToProduction
+description: >
+  ALWAYS use this skill when asked to deploy, release, push to production,
+  run a release, or ship code to the live environment. Also triggers for
+  "cut a release", "go live", or "promote to prod".
+version: 1.0
+---
+
+# Deploying to Production
+
+## Pre-Deploy Checklist (run in order, stop if any fail)
+1. `npm run lint` — must pass with zero errors
+2. `npm test -- --coverage` — must pass, coverage ≥ 80%
+3. `npm run build` — must succeed
+4. `git status` — must be on main, no uncommitted changes
+
+## Deploy Command
+```bash
+npm run deploy:prod
+# Deploys to Fly.io — takes ~3 minutes
+# Watch logs: fly logs --app my-app
+```
+
+## Post-Deploy Verification
+- Check https://my-app.fly.dev/health → must return `{"status":"ok"}`
+- Check Sentry for new errors in the first 5 minutes
+- Confirm DB migrations applied: check Fly.io console logs
+
+## Rollback (if needed)
+```bash
+fly releases list --app my-app   # Find last good version
+fly deploy --image registry.fly.io/my-app:v42  # Roll back
+```</code></pre>
+        </div>
+
+        <h3 style="margin:32px 0 14px;color:var(--text-primary);font-size:1.1rem" data-aos="fade-up">4. GeneratingDocs.md</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">markdown — .claude/skills/GeneratingDocs.md</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-markdown">---
+name: GeneratingDocs
+description: >
+  Use this skill when asked to write, update, or generate documentation,
+  README files, API docs, JSDoc comments, inline comments, or changelogs.
+  Also triggers for "document this function", "add comments", "update README".
+version: 1.0
+---
+
+# Generating Documentation
+
+## README Structure (for new projects)
+```markdown
+# Project Name
+Brief one-liner description.
+
+## Quick Start (5 steps max)
+## Configuration
+## API Reference
+## Contributing
+```
+
+## JSDoc Format
+```typescript
+/**
+ * Brief description of what this function does.
+ *
+ * @param userId - The UUID of the user to fetch
+ * @returns The user object, or null if not found
+ * @throws {DatabaseError} If the database connection fails
+ * @example
+ * const user = await getUser('550e8400-e29b-41d4-a716-446655440000')
+ */
+```
+
+## Writing Style Rules
+- Active voice, present tense ("Returns" not "Will return")
+- Max 20 words per sentence
+- Every public function gets JSDoc — no exceptions
+- API endpoints: method + path + curl example always included</code></pre>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Skills Registry -->
+        <section class="section" id="registry">
+          <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Advanced</span></div>
+          <h2 class="section-title" data-aos="fade-up">Skills Registry Pattern</h2>
+          <p class="section-subtitle" data-aos="fade-up">Keep your best skills in a shared repo and reuse them across all projects — instant productivity from day one.</p>
+
+          <div class="steps">
+            <div class="step" data-aos="fade-up">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <div class="step-title">Create a Personal Skills Repository</div>
+                <div class="step-body">Create a private GitHub repo (e.g., <code>my-claude-skills</code>) to store all your polished, reusable skills.</div>
+                <div class="code-block" style="margin-top:12px">
+                  <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                  <pre><code class="language-bash">my-claude-skills/
+├── WritingTests.md
+├── ReviewingCode.md
+├── CreatingPRDescription.md
+├── DeployingToProduction.md
+└── GeneratingDocs.md</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step" data-aos="fade-up" data-aos-delay="100">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <div class="step-title">Bootstrap New Projects in Seconds</div>
+                <div class="step-body">Run a one-liner to copy relevant skills into any new project's <code>.claude/skills/</code> directory.</div>
+                <div class="code-block" style="margin-top:12px">
+                  <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                  <pre><code class="language-bash">mkdir -p .claude/skills
+cp ~/my-claude-skills/*.md .claude/skills/
+# Or use git submodules to keep skills in sync:</code></pre>
+                </div>
+              </div>
+            </div>
+            <div class="step" data-aos="fade-up" data-aos-delay="200">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <div class="step-title">Share with Your Team via Monorepo</div>
+                <div class="step-body">For teams, commit shared skills to <code>.claude/skills/</code> in your monorepo root — every developer gets them automatically.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <details class="eli5-card" style="margin-top:32px" data-aos="fade-up">
+          <summary><span class="eli5-icon">🧒</span> ELI5 — Why not just put everything in CLAUDE.md? <span class="eli5-chevron">▼</span></summary>
+          <div class="eli5-body">
+            <p>If you wrote every recipe you know in your one notebook, it would be huge and hard to use. Every time you wanted to cook anything, you'd have to read through all the recipes — even the ones you don't need right now.</p>
+            <div class="eli5-analogy">Skills are like separate recipe cards. They only come out of the box when you need them. CLAUDE.md is the cover of the recipe box — it tells you what's in it without you reading every card every time. This saves a lot of reading (tokens)!</div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Maintenance -->
+      <section class="section" id="maintenance">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Maintenance</span></div>
+        <h2 class="section-title" data-aos="fade-up">Maintaining Your Skills</h2>
+        <ul class="checklist" data-aos="fade-up">
+          <li>Version your skills in YAML frontmatter — bump when workflows change</li>
+          <li>Keep skills in git — they're code that evolves with your project</li>
+          <li>Test trigger accuracy: ask Claude to do the task and verify the right skill loads</li>
+          <li>Archive (don't delete) skills for old workflows — rename with <code>_archived</code> prefix</li>
+          <li>Add skill authorship (<code>author:</code>) so teams know who to ask about a skill</li>
+          <li>Audit skills quarterly — prune descriptions that no longer match your workflow</li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

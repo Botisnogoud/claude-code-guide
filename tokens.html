@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Optimization — Claude Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<button class="menu-toggle">☰</button>
+<div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">C</div>
+      <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Basic Setup</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Home & Setup</a>
+      <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <div class="sidebar-daily" id="sd-setup">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
+          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-setup" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Best Practices</div>
+      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
+      <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Security Settings</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> Custom Agents</a>
+      <a href="tokens.html" class="active"><span class="nav-icon">💰</span> Token Optimization</a>
+      <div class="sidebar-daily" id="sd-practices">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
+          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-practices" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">News & Updates</div>
+      <a href="updates.html"><span class="nav-icon">📰</span> Daily Updates</a>
+      <div class="sidebar-daily" id="sd-news">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
+          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-news" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-badge">💰 Cost Efficiency</div>
+      <h1 class="hero-title">Token Optimization<br>Best Practices</h1>
+      <p class="hero-desc">Tokens are Claude Code's currency. Every file read, every command, every response costs tokens. Learn to do more with less — without sacrificing quality.</p>
+    </section>
+
+    <div class="content-area">
+
+      <!-- Understanding Tokens -->
+      <section class="section" id="understanding">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Basics</span></div>
+        <h2 class="section-title" data-aos="fade-up">Understanding Token Usage</h2>
+        <p class="section-subtitle" data-aos="fade-up">Everything Claude processes costs tokens. Understanding what's expensive helps you optimize.</p>
+
+        <div class="card-grid" data-aos="fade-up">
+          <div class="card" style="border-top:3px solid var(--accent-red)">
+            <span class="card-icon">📈</span>
+            <div class="card-title" style="color:var(--accent-red)">High Token Cost</div>
+            <div class="card-body">Large files read in full, long conversation history, many MCP servers loaded, complex system prompts.</div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--accent-orange)">
+            <span class="card-icon">📊</span>
+            <div class="card-title" style="color:var(--accent-orange)">Medium Token Cost</div>
+            <div class="card-body">Normal code edits, single skill loaded, GitHub tool calls, short bash commands with output.</div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--accent-green)">
+            <span class="card-icon">📉</span>
+            <div class="card-title" style="color:var(--accent-green)">Low Token Cost</div>
+            <div class="card-body">Targeted file reads, compact summaries, cached prompts, no unnecessary MCP servers.</div>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top:24px" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash — monitor usage in real time</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash"># Check current session cost
+/cost
+
+# Output example:
+# Tokens used: 45,230 input / 8,940 output
+# Estimated cost: $0.48 (based on current model pricing)
+# Context: 45% full</code></pre>
+        </div>
+
+        <details class="eli5-card" style="margin-top:32px" data-aos="fade-up">
+          <summary><span class="eli5-icon">🧒</span> ELI5 — What's a token? <span class="eli5-chevron">▼</span></summary>
+          <div class="eli5-body">
+            <p>Imagine each word you write costs 1 penny to send to Claude. If you send a whole book, that's very expensive! If you send just the chapter Claude needs, that's cheap.</p>
+            <div class="eli5-analogy">A "token" is roughly one word (or part of a word). Claude can only hold a certain number of tokens in memory at once — like a brain that can only think about a certain number of things. When you use too many tokens, older things get forgotten. So we want to use tokens wisely — only sending Claude what it actually needs!</div>
+          </div>
+        </details>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Cost Estimator -->
+      <section class="section" id="cost">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Cost Estimator</span></div>
+        <h2 class="section-title" data-aos="fade-up">Per-Session Cost by Task Type</h2>
+        <p class="section-subtitle" data-aos="fade-up">Rough estimates — actual costs vary by codebase size, file counts, and conversation length. Use <code>/cost</code> to see real numbers.</p>
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Task</th><th>Haiku 4.5</th><th>Sonnet 4.5</th><th>Opus 4.6</th><th>Tip</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Fix a simple bug (1 file)</td><td>~$0.01</td><td>~$0.04</td><td>~$0.20</td><td>Use Haiku</td></tr>
+              <tr><td>Write boilerplate (1 component)</td><td>~$0.02</td><td>~$0.07</td><td>~$0.35</td><td>Use Haiku</td></tr>
+              <tr><td>Code review (1 PR, 5 files)</td><td>~$0.05</td><td>~$0.18</td><td>~$0.90</td><td>Use Sonnet</td></tr>
+              <tr><td>Write test suite (10 functions)</td><td>~$0.08</td><td>~$0.28</td><td>~$1.40</td><td>Use Sonnet</td></tr>
+              <tr><td>Refactor module (10 files)</td><td>~$0.20</td><td>~$0.70</td><td>~$3.50</td><td>Use Sonnet</td></tr>
+              <tr><td>Architecture plan (complex)</td><td>⚠️ Low quality</td><td>~$1.20</td><td>~$6.00</td><td>Use Opus/Plan mode</td></tr>
+              <tr><td>Full feature (20+ files)</td><td>⚠️ Low quality</td><td>~$2.50</td><td>~$12.00</td><td>Use OpusPlan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-success" style="margin-top:16px" data-aos="fade-up">
+          <span class="callout-icon">✅</span>
+          <div><strong>OpusPlan saves 40–60%:</strong> Use <code>/plan</code> to let Opus design the approach, then Sonnet implements it. You get Opus reasoning at Sonnet cost for most of the work.</div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Top Strategies -->
+      <section class="section" id="strategies">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Strategies</span></div>
+        <h2 class="section-title" data-aos="fade-up">Top Optimization Strategies</h2>
+
+        <div class="steps">
+          <div class="step" data-aos="fade-up">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Use /compact — Your Best Friend</div>
+              <div class="step-body">When a session gets long, <code>/compact</code> replaces the full conversation history with a short summary — saving thousands of tokens while keeping the key context.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash"># After a long debugging session, before starting a new task:
+/compact
+
+# Or compact with a custom summary focus:
+/compact "we fixed the auth bug, now moving to the payment module"</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="100">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Start Fresh Sessions for Unrelated Tasks</div>
+              <div class="step-body">Don't mix unrelated tasks in one chat. A debugging session about auth has no useful context for a UI task. Use <code>/clear</code> or start a new session.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash"># Start fresh for a new unrelated task
+/clear
+
+# Or just open a new terminal session
+claude "now help me with the dashboard component"</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Use Targeted File Reads</div>
+              <div class="step-body">Tell Claude exactly which files and lines to read instead of letting it explore freely. Guide it to the relevant code.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash"># Expensive — Claude reads many files to explore:
+claude "fix the login bug"
+
+# Efficient — guide Claude to the right files:
+claude "fix the login bug in src/auth/login.ts around line 45
+        where the JWT validation happens"</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="300">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Disable Unused MCP Servers</div>
+              <div class="step-body">Each active MCP server adds hundreds of tool definitions to the system prompt. Disable any server you're not actively using.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash"># See which servers are active and their token cost:
+/mcp
+
+# Disable a server you don't need right now:
+/mcp disable stripe
+
+# Or in settings.json, set "disabled": true for servers not in use</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="400">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Keep CLAUDE.md Concise</div>
+              <div class="step-body">CLAUDE.md loads every session. Every extra line = tokens wasted on every single interaction. Audit it regularly.</div>
+              <div class="do-dont">
+                <div class="card do-card">
+                  <div class="card-label">✅ Concise</div>
+                  <code>Use TypeScript strict mode. No `any`.</code>
+                </div>
+                <div class="card dont-card">
+                  <div class="card-label">❌ Verbose</div>
+                  <code>When writing TypeScript code, always make sure to enable TypeScript's strict mode by setting "strict": true in the tsconfig.json file, and avoid using the `any` type as it defeats the purpose of using TypeScript...</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="500">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">Use Skills for Progressive Disclosure</div>
+              <div class="step-body">Instead of including all instructions in CLAUDE.md, use Skills — they load only when needed, recovering up to 82% of tokens per session.</div>
+              <div class="callout callout-success" style="margin-top:12px">
+                <span class="callout-icon">✅</span>
+                <div>Skills metadata (~200 tokens) loads at start. Full skill content (~5,000 tokens) loads only when triggered. On a typical session, this saves ~15,000 tokens.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-up" data-aos-delay="600">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">Use Cheaper Models for Simple Tasks</div>
+              <div class="step-body">Route simple tasks to faster, cheaper models. Use Haiku for boilerplate, Sonnet for standard tasks, Opus only for complex architectural reasoning.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">json — settings.json</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-json">{
+  "env": {
+    "ANTHROPIC_SMALL_FAST_MODEL": "claude-haiku-4-5-20251001"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Prompt Caching -->
+      <section class="section" id="caching">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Automatic</span></div>
+        <h2 class="section-title" data-aos="fade-up">Automatic Optimizations</h2>
+        <p class="section-subtitle" data-aos="fade-up">Claude Code handles these automatically — but knowing about them helps you design workflows that benefit from them.</p>
+
+        <div class="card-grid" data-aos="fade-up">
+          <div class="card">
+            <span class="card-icon">⚡</span>
+            <div class="card-title">Prompt Caching</div>
+            <div class="card-body">Repeated system prompts (CLAUDE.md, skills metadata) are cached. Subsequent sessions pay 90% less for the same content.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🗜️</span>
+            <div class="card-title">Auto-Compaction</div>
+            <div class="card-body">When context reaches 95% full, Claude automatically summarizes older messages to stay under the limit.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🧠</span>
+            <div class="card-title">OpusPlan Routing</div>
+            <div class="card-body">In plan mode, Opus handles the thinking, Sonnet handles implementation. You get Opus quality at Sonnet cost for most work.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Prompting Techniques -->
+      <section class="section" id="prompting">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Prompt Engineering</span></div>
+        <h2 class="section-title" data-aos="fade-up">10 Prompting Techniques That Reduce Token Use</h2>
+
+        <div class="steps">
+          <div class="step" data-aos="fade-up">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Specify exact file paths and line numbers</div>
+              <div class="step-body">Instead of "fix the login bug" → "fix the bug in <code>src/auth/login.ts:45</code> where JWT validation fails on expired tokens." Saves 1k–5k tokens of exploration.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="60">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Tell Claude what NOT to read</div>
+              <div class="step-body">"Fix the header component. Don't read any files except <code>src/components/Header.tsx</code> and its imports." Prevents unnecessary file exploration.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="120">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Pre-filter results before asking Claude</div>
+              <div class="step-body">Run <code>grep -n "pattern" file.ts</code> yourself, then include the line numbers in your prompt. Claude reads only those lines, not the whole file.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="180">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Use code snippets instead of file paths</div>
+              <div class="step-body">For small changes, paste the relevant 20 lines directly into the prompt instead of asking Claude to read a 500-line file to find them.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="240">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Set scope boundaries explicitly</div>
+              <div class="step-body">"Only modify files in <code>src/payments/</code>. Do not touch <code>src/auth/</code> or test files." Prevents Claude from making unrequested broad changes.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="300">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">One task per session</div>
+              <div class="step-body">Start a fresh session (<code>/clear</code>) for each unrelated task. Mixing tasks causes context bloat — old context is still paid for even if irrelevant.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="360">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">Use /compact with a focus hint</div>
+              <div class="step-body"><code>/compact "we fixed auth, now working on payment UI"</code> — the hint ensures the summary keeps the right context and discards the rest.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="420">
+            <div class="step-num">8</div>
+            <div class="step-content">
+              <div class="step-title">Ask for summaries, not full rewrites</div>
+              <div class="step-body">"Summarize what changes are needed in a numbered list. Don't implement yet." Then you review before Claude writes code — avoiding wasted implementation tokens.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="480">
+            <div class="step-num">9</div>
+            <div class="step-content">
+              <div class="step-title">Disable verbose output modes</div>
+              <div class="step-body">Add to CLAUDE.md: "Be concise. Skip obvious explanations. No preamble like 'Of course!' or 'Great question!'. Just do the task." Cuts response tokens 20–30%.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="540">
+            <div class="step-num">10</div>
+            <div class="step-content">
+              <div class="step-title">Use Haiku for drafting, Sonnet for final</div>
+              <div class="step-body">Generate a first draft with Haiku (cheap), review it, then ask Sonnet to refine only the problematic parts. Saves 60–80% on draft generation cost.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Quick Wins -->
+      <section class="section" id="quick-wins">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Quick Wins</span></div>
+        <h2 class="section-title" data-aos="fade-up">Quick-Win Checklist</h2>
+
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead><tr><th>Action</th><th>Token Saving</th><th>Effort</th></tr></thead>
+            <tbody>
+              <tr><td>Run <code>/compact</code> after long sessions</td><td>🟢 High (5k–20k tokens)</td><td>⚡ 2 seconds</td></tr>
+              <tr><td>Disable unused MCP servers</td><td>🟢 High (500–2000/server)</td><td>⚡ 1 minute</td></tr>
+              <tr><td>Trim CLAUDE.md to &lt;200 lines</td><td>🟡 Medium (2k–5k tokens)</td><td>🕐 30 minutes once</td></tr>
+              <tr><td>Guide Claude to specific files/lines</td><td>🟡 Medium (1k–5k tokens)</td><td>⚡ 10 seconds</td></tr>
+              <tr><td>Use Skills instead of CLAUDE.md for procedures</td><td>🟢 High (10k–20k tokens/session)</td><td>🕐 1 hour setup</td></tr>
+              <tr><td>Use <code>/clear</code> before new unrelated tasks</td><td>🟡 Medium (varies)</td><td>⚡ 2 seconds</td></tr>
+              <tr><td>Use Haiku model for boilerplate tasks</td><td>💰 80% cost reduction</td><td>⚡ Config once</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

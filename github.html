@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Integration — Claude Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<button class="menu-toggle">☰</button>
+<div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">C</div>
+      <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Basic Setup</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Home & Setup</a>
+      <a href="github.html" class="active"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <div class="sidebar-daily" id="sd-setup">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
+          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-setup" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Best Practices</div>
+      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
+      <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Security Settings</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> Custom Agents</a>
+      <a href="tokens.html"><span class="nav-icon">💰</span> Token Optimization</a>
+      <div class="sidebar-daily" id="sd-practices">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
+          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-practices" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+
+      <div class="nav-label">News & Updates</div>
+      <a href="updates.html"><span class="nav-icon">📰</span> Daily Updates</a>
+      <div class="sidebar-daily" id="sd-news">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
+          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-news" class="sidebar-daily-content">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-badge">🐙 Integration</div>
+      <h1 class="hero-title">GitHub Integration</h1>
+      <p class="hero-desc">Connect Claude Code to GitHub with OAuth, Personal Access Tokens, or GitHub Apps — enabling PR creation, issue management, and CI/CD automation.</p>
+    </section>
+
+    <div class="content-area">
+
+      <!-- Method 1: OAuth -->
+      <section class="section" id="oauth">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Method 1</span></div>
+        <h2 class="section-title" data-aos="fade-up">OAuth Authentication (Easiest)</h2>
+        <p class="section-subtitle" data-aos="fade-up">The simplest way — authenticate Claude Code directly with your GitHub account in seconds.</p>
+
+        <div class="steps">
+          <div class="step" data-aos="fade-up">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Run the Setup Command</div>
+              <div class="step-body">Inside any Claude Code session, run:</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash">claude setup-token</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="100">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Authorize in Browser</div>
+              <div class="step-body">A browser window opens. Log in to GitHub and click "Authorize Anthropic Claude Code". This grants Claude the permissions listed below.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Test the Connection</div>
+              <div class="step-body">Back in your terminal, try asking Claude to list your repos or create a PR.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash">claude "create a pull request for my current branch with a description of changes"</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">💡</span>
+          <div><strong>Who can use OAuth?</strong> Available on Claude Pro, Max, Team, and Enterprise plans. Free plan users should use PATs instead.</div>
+        </div>
+      </section>
+
+      <!-- Method 2: PAT -->
+      <section class="section" id="pat">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Method 2</span></div>
+        <h2 class="section-title" data-aos="fade-up">Personal Access Token (PAT)</h2>
+        <p class="section-subtitle" data-aos="fade-up">For fine-grained control or when OAuth isn't available — create a token with only the permissions Claude needs.</p>
+
+        <div class="steps">
+          <div class="step" data-aos="fade-up">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Go to GitHub Token Settings</div>
+              <div class="step-body">Navigate to <strong>GitHub → Settings → Developer Settings → Personal Access Tokens → Fine-grained tokens</strong></div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="100">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Set Minimal Permissions</div>
+              <div class="step-body">Only grant what Claude needs. Use the principle of least privilege:</div>
+              <div class="table-wrap" style="margin-top:12px">
+                <table>
+                  <thead><tr><th>Permission</th><th>Access Level</th><th>Why Needed</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>actions</code></td><td>Read</td><td>View CI/CD status</td></tr>
+                    <tr><td><code>contents</code></td><td>Write</td><td>Push commits, read files</td></tr>
+                    <tr><td><code>issues</code></td><td>Write</td><td>Create & comment on issues</td></tr>
+                    <tr><td><code>metadata</code></td><td>Read</td><td>View repo info (required)</td></tr>
+                    <tr><td><code>pull_requests</code></td><td>Write</td><td>Open & manage PRs</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Set an Expiry Date</div>
+              <div class="step-body">Always set an expiration — 30 or 90 days is recommended. Rotate tokens regularly.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="300">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Add Token to Claude Code</div>
+              <div class="step-body">Set the token as an environment variable or pass it during setup:</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash"># Add to your shell profile (~/.bashrc or ~/.zshrc)
+export GITHUB_TOKEN="github_pat_xxxxxxxxxxxx"
+
+# Or configure directly
+claude mcp add github --token github_pat_xxxxxxxxxxxx</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-warning" data-aos="fade-up">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Never commit tokens to git!</strong> Add <code>.env</code> and any file containing your token to <code>.gitignore</code>. Use GitHub Secrets for CI/CD workflows.</div>
+        </div>
+      </section>
+
+      <!-- GitHub Actions CI/CD -->
+      <section class="section" id="actions">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">CI/CD</span></div>
+        <h2 class="section-title" data-aos="fade-up">GitHub Actions Integration</h2>
+        <p class="section-subtitle" data-aos="fade-up">Run Claude Code in your CI/CD pipeline to automatically review PRs, generate documentation, or fix failing tests.</p>
+
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">yaml — .github/workflows/claude-review.yml</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-yaml">name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          task: |
+            Review this pull request for:
+            1. Code quality issues
+            2. Security vulnerabilities
+            3. Missing tests
+            4. Breaking changes
+            Post a detailed review comment on the PR.</code></pre>
+        </div>
+
+        <div class="callout callout-success" style="margin-top:16px" data-aos="fade-up">
+          <span class="callout-icon">✅</span>
+          <div>Store <code>ANTHROPIC_API_KEY</code> in <strong>GitHub → Settings → Secrets and Variables → Actions</strong>. Never hardcode keys in workflow files.</div>
+        </div>
+
+        <h3 style="font-size:1.1rem;margin:32px 0 16px;color:var(--text-primary)" data-aos="fade-up">More Workflow Templates</h3>
+
+        <div class="workflow-card" data-aos="fade-up">
+          <div class="workflow-title">🔧 Auto-Fix Lint Errors</div>
+          <div class="workflow-desc">Triggered on PR — Claude runs ESLint, reads error output, then edits the failing files to fix all lint errors automatically.</div>
+        </div>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">yaml — .github/workflows/claude-lint-fix.yml</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-yaml">name: Claude Auto-Fix Lint
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  lint-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          task: |
+            Run `npm run lint 2>&1` and read the output.
+            Fix every lint error in the affected files.
+            Commit the fixes with message: "fix: auto-fix lint errors via Claude"</code></pre>
+        </div>
+
+        <div class="workflow-card" data-aos="fade-up" style="border-left-color:var(--accent-purple)">
+          <div class="workflow-title">📚 Auto-Generate API Docs</div>
+          <div class="workflow-desc">Triggered when API route files change — Claude reads the changed routes and updates the API reference documentation.</div>
+        </div>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">yaml — .github/workflows/claude-docs.yml</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-yaml">name: Claude API Docs
+on:
+  push:
+    paths: ['src/api/**', 'src/routes/**']
+    branches: [main]
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          task: |
+            Read all changed API route files.
+            Update docs/api-reference.md with accurate endpoint documentation
+            including: method, path, request body schema, response schema, example curl.
+            Commit with: "docs: update API reference for changed routes"</code></pre>
+        </div>
+
+        <div class="workflow-card" data-aos="fade-up" style="border-left-color:var(--accent-red)">
+          <div class="workflow-title">🔒 Security Scan on Push</div>
+          <div class="workflow-desc">Runs a security audit agent on every push to main — posts findings as a GitHub commit comment and fails if critical issues found.</div>
+        </div>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">yaml — .github/workflows/claude-security.yml</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-yaml">name: Claude Security Scan
+on:
+  push:
+    branches: [main]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          task: |
+            Use the security-auditor agent to scan all changed files.
+            Check for: SQL injection, XSS, hardcoded secrets, insecure deps.
+            If any Critical findings exist, exit with code 1 to fail the build.
+            Post all findings as a commit comment.</code></pre>
+        </div>
+      </section>
+
+      <!-- GitHub App -->
+      <section class="section" id="github-app">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Method 3</span></div>
+        <h2 class="section-title" data-aos="fade-up">GitHub App (Team/Enterprise)</h2>
+        <p class="section-subtitle" data-aos="fade-up">For organizations — create a GitHub App for centralized access control across all team repositories.</p>
+
+        <div class="steps">
+          <div class="step" data-aos="fade-up">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Create GitHub App</div>
+              <div class="step-body">Go to <strong>GitHub Organization Settings → Developer Settings → GitHub Apps → New GitHub App</strong>. Use the Anthropic manifest for one-click setup:</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">json — app-manifest.json</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-json">{
+  "name": "Claude Code Bot",
+  "description": "AI-powered code assistant",
+  "url": "https://claude.ai",
+  "webhook_active": false,
+  "public": false,
+  "default_permissions": {
+    "actions": "read",
+    "contents": "write",
+    "issues": "write",
+    "pull_requests": "write",
+    "metadata": "read"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="100">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Install on Repositories</div>
+              <div class="step-body">After creating, install the app on specific repositories or all org repos. Fine-grained access per repo.</div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Configure in Claude Code</div>
+              <div class="step-body">Add the App ID and private key to your Claude Code config or CI secrets.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash">export GITHUB_APP_ID="12345"
+export GITHUB_APP_PRIVATE_KEY_PATH="/path/to/private-key.pem"</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ELI5 -->
+      <details class="eli5-card" data-aos="fade-up">
+        <summary><span class="eli5-icon">🧒</span> ELI5 — What's the difference between OAuth, PAT, and GitHub App? <span class="eli5-chevron">▼</span></summary>
+        <div class="eli5-body">
+          <p>Imagine you want Claude to enter your school (GitHub) to help you:</p>
+          <div class="eli5-analogy">
+            🪪 <strong>OAuth</strong> is like using your school ID card. Quick and easy — just swipe and you're in. Best for personal use.<br><br>
+            🔑 <strong>PAT (Personal Access Token)</strong> is like a special key you cut yourself. You decide which doors it opens and which it doesn't. Best when you want tight control.<br><br>
+            🏫 <strong>GitHub App</strong> is like giving Claude an official visitor badge for the whole school building. Admins control it, it works for everyone, and you can revoke it centrally. Best for teams.
+          </div>
+        </div>
+      </details>
+
+      <!-- Troubleshooting -->
+      <section class="section" id="troubleshooting" style="margin-top:48px">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Troubleshooting</span></div>
+        <h2 class="section-title" data-aos="fade-up">Common GitHub Integration Errors</h2>
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td><code>401 Unauthorized</code></td><td>Token expired or missing</td><td>Regenerate PAT, re-run <code>claude setup-token</code></td></tr>
+              <tr><td><code>403 Forbidden</code></td><td>Token lacks required permissions</td><td>Add <code>contents: write</code> and <code>pull_requests: write</code> permissions to your fine-grained PAT</td></tr>
+              <tr><td>Action fails: "resource not accessible"</td><td>GITHUB_TOKEN doesn't have write perms in fork PRs</td><td>Use <code>pull-requests: write</code> permission in workflow YAML under <code>permissions:</code></td></tr>
+              <tr><td>Claude doesn't create PR</td><td>Branch has no commits, or already has a PR</td><td>Verify there are unpushed commits and no existing PR for the branch</td></tr>
+              <tr><td>Rate limit hit in CI</td><td>Too many API calls per minute</td><td>Add <code>retry_on_error: true</code> to action config, or schedule workflow off-peak hours</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Security Checklist -->
+      <section class="section" style="margin-top:48px">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Security</span></div>
+        <h2 class="section-title" data-aos="fade-up">GitHub Security Checklist</h2>
+        <ul class="checklist" data-aos="fade-up">
+          <li>Use fine-grained tokens (not classic tokens) with minimal scopes</li>
+          <li>Set expiry dates on all tokens — rotate every 30–90 days</li>
+          <li>Never commit tokens, keys, or credentials to any git repository</li>
+          <li>Use GitHub Actions Secrets for CI/CD credentials</li>
+          <li>Review OAuth app permissions quarterly — revoke unused apps</li>
+          <li>Enable two-factor authentication on your GitHub account</li>
+          <li>Audit Claude's GitHub actions via repository event logs</li>
+          <li>For teams, use GitHub App (not PATs) for centralized control</li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
