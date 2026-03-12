@@ -86,7 +86,6 @@ function initParticles(canvasId) {
   function draw() {
     ctx.clearRect(0, 0, W, H);
 
-    // Draw connections
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
@@ -103,7 +102,6 @@ function initParticles(canvasId) {
       }
     }
 
-    // Draw particles
     particles.forEach(p => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -133,7 +131,7 @@ function initCodeCopy() {
       const pre = btn.closest('.code-block').querySelector('pre');
       navigator.clipboard.writeText(pre.innerText).then(() => {
         const orig = btn.textContent;
-        btn.textContent = '✓ Copied!';
+        btn.textContent = '\u2713 Copied!';
         btn.style.color = '#10b981';
         setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
       });
@@ -149,7 +147,7 @@ function initELI5() {
         const body = details.querySelector('.eli5-body');
         if (body) {
           body.style.animation = 'none';
-          body.offsetHeight; // reflow
+          body.offsetHeight;
           body.style.animation = 'eli5Reveal 0.35s ease-out forwards';
         }
       }
@@ -168,7 +166,6 @@ async function initDailyTip() {
     const res  = await fetch('assets/data/daily-tips.json');
     const data = await res.json();
 
-    // day 0=Sun…6=Sat → map to Mon=0…Sun=6 index
     const jsDay = new Date().getDay();
     const idx   = jsDay === 0 ? 6 : jsDay - 1;
 
@@ -178,20 +175,145 @@ async function initDailyTip() {
       el.innerHTML =
         `<strong>${tip.day}:</strong> ${tip.tip}` +
         (tip.example ? `<code>${tip.example}</code>` : '') +
-        (tip.link    ? `<a href="${tip.link}">Learn more →</a>` : '');
+        (tip.link    ? `<a href="${tip.link}">Learn more \u2192</a>` : '');
     }
 
     if (data.setup)     renderTip('sd-tip-setup',      data.setup[idx]);
     if (data.practices) renderTip('sd-tip-practices',  data.practices[idx]);
     if (data.news)      renderTip('sd-tip-news',       data.news[idx]);
 
-    // Auto-open all daily sections
     document.querySelectorAll('.sidebar-daily').forEach(el => el.classList.add('open'));
 
   } catch (e) {
     document.querySelectorAll('.sidebar-daily-content').forEach(el => {
       el.textContent = 'Tips unavailable';
     });
+  }
+}
+
+/* ---------- Digest Tab Switcher ---------- */
+function switchDigestTab(panel, btn) {
+  document.querySelectorAll('.digest-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.digest-tab').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById('digest-' + panel);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+/* ---------- Load Digest (updates.html) ---------- */
+async function loadDigest() {
+  try {
+    const res  = await fetch('assets/data/updates.json');
+    const data = await res.json();
+    const all  = data.updates || [];
+
+    const research  = all.filter(u => u.category === 'research')
+                         .sort((a,b) => new Date(b.date) - new Date(a.date))
+                         .slice(0, 5);
+    const articles  = all.filter(u => ['release','feature','update','security'].includes(u.category))
+                         .sort((a,b) => new Date(b.date) - new Date(a.date))
+                         .slice(0, 5);
+    const community = all.filter(u => u.category === 'community')
+                         .sort((a,b) => new Date(b.date) - new Date(a.date))
+                         .slice(0, 5);
+
+    function renderDigestList(containerId, items) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = items.map((item, i) => {
+        const url  = item.arxivUrl || item.sourceUrl || '#';
+        const srcCls = item.source === 'arxiv'    ? 'dsb-arxiv'
+                     : item.source === 'official' ? 'dsb-official'
+                     : item.source === 'reddit'   ? 'dsb-reddit'
+                     : 'dsb-community';
+        const srcLabel = item.source === 'arxiv' ? 'arXiv'
+                       : item.source === 'official' ? 'Official'
+                       : item.source === 'reddit'   ? 'Reddit'
+                       : item.source;
+        return `
+          <div class="digest-ranked-item">
+            <span class="digest-rank">#${i+1}</span>
+            <span class="digest-item-icon">${item.icon || ''}</span>
+            <div class="digest-item-body">
+              <a href="${url}" target="_blank" rel="noopener" class="digest-item-title">${item.title}</a>
+              <div class="digest-item-excerpt">${item.excerpt}</div>
+              <span class="digest-source-badge ${srcCls}">${srcLabel}</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    renderDigestList('digest-research',  research);
+    renderDigestList('digest-articles',  articles);
+    renderDigestList('digest-community', community);
+
+  } catch(e) {
+    ['digest-research','digest-articles','digest-community'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<p style="color:var(--text-muted);padding:16px">Could not load digest.</p>';
+    });
+  }
+}
+
+/* ---------- Load Research Papers (updates.html) ---------- */
+async function loadResearchPapers() {
+  const container = document.getElementById('research-papers');
+  if (!container) return;
+
+  try {
+    const res  = await fetch('assets/data/updates.json');
+    const data = await res.json();
+    const papers = (data.updates || [])
+      .filter(u => u.category === 'research')
+      .sort((a,b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5);
+
+    const insightMap = {
+      'Agentless': "Don't over-engineer your agent pipelines. A simple localise-then-repair loop often outperforms complex multi-step frameworks at a fraction of the cost.",
+      'SWE-agent': "Tool interface design is as important as model choice. Constrain your agents to Read/Grep/Edit and watch reliability improve.",
+      'ReAct': "The think-then-act loop is the foundation of every Claude Code session. Write CLAUDE.md instructions in step-by-step form to exploit this pattern.",
+      'Toolformer': "Write your SKILL.md tool descriptions like Toolformer training examples — clear, consistent, with usage examples. Claude was trained on this pattern.",
+      'Constitutional': "Write your CLAUDE.md 'Do Not' rules constitutionally — clear, specific, with the reason stated. This matches how Claude was trained to follow principles."
+    };
+
+    function getInsight(title) {
+      for (const [k, v] of Object.entries(insightMap)) {
+        if (title.includes(k)) return v;
+      }
+      return paper.excerpt;
+    }
+
+    const yearMap = {
+      'Agentless': '2024', 'SWE-agent': '2024', 'ReAct': '2022',
+      'Toolformer': '2023', 'Constitutional': '2022'
+    };
+    function getYear(title) {
+      for (const [k, v] of Object.entries(yearMap)) {
+        if (title.includes(k)) return v;
+      }
+      return new Date(papers[0].date).getFullYear();
+    }
+
+    container.innerHTML = papers.map((paper, i) => `
+      <div class="research-card" data-aos="fade-up" data-aos-delay="${i * 80}">
+        <div class="research-card-header">
+          <a href="${paper.arxivUrl || paper.sourceUrl}" target="_blank" rel="noopener" class="research-title">${paper.title}</a>
+          <span class="research-year-badge">${getYear(paper.title)}</span>
+        </div>
+        <div class="research-authors">${paper.authors || ''}</div>
+        <div class="research-abstract">${paper.abstract || paper.excerpt}</div>
+        <div class="research-insight">
+          <strong>Key Insight for Claude Code:</strong> ${getInsight(paper.title)}
+        </div>
+        <a href="${paper.arxivUrl || paper.sourceUrl}" target="_blank" rel="noopener" class="research-read-btn">
+          Read Paper \u2192
+        </a>
+      </div>
+    `).join('');
+
+    AOS.init();
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--text-muted)">Could not load research papers.</p>';
   }
 }
 
@@ -204,11 +326,10 @@ async function loadUpdates() {
     const res  = await fetch('assets/data/updates.json');
     const data = await res.json();
 
-    const filterBtns = document.querySelectorAll('[data-filter]');
-    let current = 'all';
+    const filterBtns  = document.querySelectorAll('[data-filter]');
+    const sourceBtns  = document.querySelectorAll('[data-source]');
+    let current       = 'all';
     let sourceCurrent = 'all';
-
-    const sourceBtns = document.querySelectorAll('[data-source]');
 
     function render(catFilter, srcFilter) {
       feed.innerHTML = '';
@@ -224,12 +345,11 @@ async function loadUpdates() {
         return;
       }
 
-      // Update filter button counts
       filterBtns.forEach(btn => {
         const f = btn.dataset.filter;
+        if (!f) return;
         if (f === 'all') { btn.dataset.count = data.updates.length; return; }
-        const cnt = data.updates.filter(u => u.category === f).length;
-        btn.dataset.count = cnt;
+        btn.dataset.count = data.updates.filter(u => u.category === f).length;
       });
 
       items.forEach((item, i) => {
@@ -238,19 +358,26 @@ async function loadUpdates() {
         el.setAttribute('data-aos', 'fade-up');
         el.setAttribute('data-aos-delay', i * 60);
 
+        const linkUrl = item.arxivUrl || item.sourceUrl;
+
+        // Extra fields for research items
+        const authorsHtml = item.authors
+          ? `<span style="font-size:0.78rem;color:var(--text-muted);margin-left:8px">${item.authors}</span>` : '';
+
         el.innerHTML = `
           <div class="news-meta">
             <span class="badge badge-${categoryBadge(item.category)}">${item.category}</span>
-            ${item.source ? `<span class="badge badge-${item.source}">${item.source}</span>` : ''}
+            ${item.source ? `<span class="badge badge-${item.source === 'arxiv' ? 'purple' : item.source}">${item.source}</span>` : ''}
             <span class="news-date">${formatDate(item.date)}</span>
-            ${item.readTime ? `<span class="news-read-time">⏱ ${item.readTime}</span>` : ''}
+            ${item.readTime ? `<span class="news-read-time">\u23f1 ${item.readTime}</span>` : ''}
+            ${authorsHtml}
           </div>
           <div class="news-title">${item.icon || ''} ${item.title}</div>
           <div class="news-excerpt">${item.excerpt}</div>
-          ${item.sourceUrl ? `<a href="${item.sourceUrl}" target="_blank" rel="noopener" class="news-source-link">View original →</a>` : ''}
+          ${linkUrl ? `<a href="${linkUrl}" target="_blank" rel="noopener" class="news-source-link">View original \u2192</a>` : ''}
           ${item.content ? `
             <details style="margin-top:12px">
-              <summary style="cursor:pointer;color:var(--accent-cyan);font-size:0.82rem;font-weight:600">Read more ▾</summary>
+              <summary style="cursor:pointer;color:var(--accent-cyan);font-size:0.82rem;font-weight:600">Read more \u25be</summary>
               <div class="news-detail">${item.content}</div>
             </details>
           ` : ''}
@@ -287,7 +414,10 @@ async function loadUpdates() {
 }
 
 function categoryBadge(cat) {
-  const map = { release: 'green', feature: 'cyan', update: 'purple', security: 'red', community: 'orange' };
+  const map = {
+    release: 'green', feature: 'cyan', update: 'purple',
+    security: 'red', community: 'orange', research: 'purple'
+  };
   return map[cat] || 'cyan';
 }
 
@@ -314,5 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initELI5();
   initParticles('hero-canvas');
   loadUpdates();
+  loadDigest();
+  loadResearchPapers();
   initDailyTip();
 });
