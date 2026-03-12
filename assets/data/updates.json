@@ -1,6 +1,72 @@
 {
   "updates": [
     {
+      "date": "2026-03-12",
+      "category": "release",
+      "source": "official",
+      "sourceUrl": "https://www.anthropic.com/news",
+      "readTime": "4 min",
+      "title": "Claude 4.6 Family Released — Opus 4.6, Sonnet 4.6, Haiku 4.5",
+      "icon": "🚀",
+      "excerpt": "Anthropic ships the Claude 4.6 family: Opus 4.6 for deep reasoning, Sonnet 4.6 as the new Claude Code default, and Haiku 4.5 for fast lightweight tasks.",
+      "content": "The Claude 4.6 family is now generally available. Opus 4.6 (claude-opus-4-6) leads on complex multi-step reasoning, architecture planning, and hard debugging. Sonnet 4.6 (claude-sonnet-4-6) is the new recommended default for Claude Code. Haiku 4.5 (claude-haiku-4-5-20251001) handles boilerplate and quick lookups at a fraction of the cost. Set your model permanently in ~/.claude/settings.json or per-session with --model flag."
+    },
+    {
+      "date": "2026-03-11",
+      "category": "feature",
+      "source": "official",
+      "sourceUrl": "https://www.anthropic.com/news",
+      "readTime": "3 min",
+      "title": "Fast Mode — Full Opus Speed Without Any Model Downgrade",
+      "icon": "⚡",
+      "excerpt": "Fast mode delivers noticeably faster output on Opus 4.6 with zero model compromise. Toggle with /fast in any session.",
+      "content": "Fast mode is a runtime throughput optimisation — not a model switch. Enabled with /fast, Claude Opus 4.6 streams tokens significantly faster. The full model reasoning and quality remain unchanged. Toggle on/off mid-session. Best used for large file writes, repetitive refactoring, and boilerplate-heavy tasks where you want Opus quality at higher speed."
+    },
+    {
+      "date": "2026-03-10",
+      "category": "feature",
+      "source": "official",
+      "sourceUrl": "https://www.anthropic.com/news",
+      "readTime": "2 min",
+      "title": "Configurable Status Line — Live Model, Tokens and Cost in Terminal",
+      "icon": "📊",
+      "excerpt": "A persistent status line now shows current model, token usage, session cost, and working directory — updated after every tool call.",
+      "content": "The status line is configured in ~/.claude/settings.json and shows real-time: current model, tokens used vs context limit, estimated session cost, and active directory. Updates automatically after every tool call — no need to run /status manually. Especially useful in long agentic sessions where staying on top of context and cost prevents surprises."
+    },
+    {
+      "date": "2026-03-08",
+      "category": "feature",
+      "source": "official",
+      "sourceUrl": "https://www.anthropic.com/news",
+      "readTime": "4 min",
+      "title": "Auto-Memory — MEMORY.md Persists Project Context Across Sessions",
+      "icon": "🧠",
+      "excerpt": "Claude Code now reads and writes a per-project MEMORY.md automatically. Architecture decisions, key paths, and preferences survive between sessions with zero manual effort.",
+      "content": "Auto-memory stores project context in ~/.claude/projects/<project>/memory/MEMORY.md. Claude reads it at every session start and updates it with durable findings — architecture decisions, important file paths, debugging patterns, and user preferences. Organised semantically by topic (not chronologically) and kept under 200 lines to stay within the context preview window. The biggest quality-of-life upgrade for developers who return to the same codebase daily."
+    },
+    {
+      "date": "2026-03-06",
+      "category": "feature",
+      "source": "official",
+      "sourceUrl": "https://www.anthropic.com/news",
+      "readTime": "3 min",
+      "title": "Parallel Sub-Agents — Multiple Agents Running Simultaneously",
+      "icon": "🤖",
+      "excerpt": "Claude Code now launches multiple sub-agents in a single response and runs them in parallel — 3-5x speedup on independent tasks.",
+      "content": "When tasks are independent, Claude now issues multiple Agent tool calls in one response, running all in parallel. Combine with worktree isolation so each agent gets its own safe git branch. The orchestrating agent merges results when all complete. Benchmarked 3-5x speedup on parallelisable workloads like simultaneous test-coverage scanning, security auditing, and documentation generation across a monorepo."
+    },
+    {
+      "date": "2026-03-04",
+      "category": "community",
+      "source": "reddit",
+      "sourceUrl": "https://reddit.com/r/ClaudeAI",
+      "readTime": "5 min",
+      "title": "Reddit: MEMORY.md + Skills = Zero Warm-Up Time on Long Projects",
+      "icon": "💬",
+      "excerpt": "Engineer shares two-layer strategy: MEMORY.md holds what Claude should know, Skills hold what Claude should do. Together they eliminate 95% of session ramp-up.",
+      "content": "User persistent_builder explains the pattern: MEMORY.md stores durable knowledge (architecture, gotchas, user preferences, key file paths) while Skills store reusable procedures (how to run tests, write a PR, deploy). At session start MEMORY.md auto-loads; Skills invoke on demand. Result: new Claude Code sessions are instantly productive on complex long-running projects. Template shared in comments, 1.8k upvotes."
+    },
+    {
       "date": "2026-03-03",
       "category": "community",
       "source": "reddit",
