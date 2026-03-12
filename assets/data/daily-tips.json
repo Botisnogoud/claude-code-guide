@@ -46,82 +46,89 @@
   "practices": [
     {
       "day": "Monday",
-      "tip": "Name your Skills with gerunds (WritingTests.md not tests.md) — Claude triggers them more reliably.",
-      "example": "mkdir -p .claude/skills && touch .claude/skills/WritingTests.md",
-      "link": "skills.html"
-    },
-    {
-      "day": "Tuesday",
-      "tip": "Put non-obvious architecture decisions in CLAUDE.md, not obvious ones. Claude already knows React — explain YOUR patterns.",
-      "example": "## Why We Use Server Components\\nWe avoid 'use client' unless absolutely necessary to maximize ISR caching.",
+      "tip": "Store MEMORY.md per project in <code>~/.claude/projects/&lt;project&gt;/memory/</code> — Claude reads it at every session start and updates it automatically. Organise by topic, not date.",
+      "example": "## Architecture\nWe use server components by default. Client components only when state is needed.",
       "link": "claude-md.html"
     },
     {
+      "day": "Tuesday",
+      "tip": "Name your Skills with action verbs (ReviewPR.md, RunMigration.md) — Claude triggers them more reliably than noun-based names.",
+      "example": "mkdir -p .claude/skills && touch .claude/skills/ReviewPR.md",
+      "link": "skills.html"
+    },
+    {
       "day": "Wednesday",
-      "tip": "Use <code>deny: [\"Bash(rm -rf*)\", \"Bash(sudo *)\"]</code> in settings.json to protect against accidental destructive commands.",
-      "example": "{ \"permissions\": { \"deny\": [\"Bash(rm -rf*)\"] } }",
+      "tip": "Use <code>deny: [\"Bash(rm -rf*)\", \"Bash(git push --force*)\"]</code> in settings.json — block destructive commands at the permission layer, not just in CLAUDE.md.",
+      "example": "{ \"permissions\": { \"deny\": [\"Bash(rm -rf*)\", \"Bash(git push --force*)\"] } }",
       "link": "security.html"
     },
     {
       "day": "Thursday",
-      "tip": "Give agents the minimum tools they need. A code reviewer only needs Read, Glob, Grep — never Write access.",
-      "example": "tools:\\n  - Read\\n  - Glob\\n  - Grep",
+      "tip": "Give agents the minimum tools they need. A code-reviewer only needs Read, Glob, Grep — never Write or Bash. Least-privilege by default.",
+      "example": "tools:\n  - Read\n  - Glob\n  - Grep",
       "link": "agents.html"
     },
     {
       "day": "Friday",
-      "tip": "Run <code>/compact</code> before switching to a new task in the same session — saves 5k–20k tokens instantly.",
-      "example": "/compact \"fixed the auth bug, now starting on payments\"",
+      "tip": "Run <code>/compact</code> before switching tasks in the same session — saves 5k–20k tokens and keeps Claude focused on the new task only.",
+      "example": "/compact \"auth bug fixed, now starting payment flow\"",
       "link": "tokens.html"
     },
     {
       "day": "Saturday",
-      "tip": "Use <code>@imports</code> in CLAUDE.md to reference your schema files — Claude reads them automatically at session start.",
-      "example": "See @prisma/schema.prisma for the database schema.",
-      "link": "claude-md.html"
+      "tip": "Use parallel sub-agents for independent work — launch multiple Agent calls in one message. Each runs simultaneously, reducing wall-clock time by 3-5x on parallelisable tasks.",
+      "example": "# Claude issues multiple Agent tool calls in a single message",
+      "link": "agents.html"
     },
     {
       "day": "Sunday",
-      "tip": "Scope MCP filesystem servers to specific directories — never grant root access to an MCP server.",
-      "example": "args: [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/allowed/path\"]",
+      "tip": "Scope MCP filesystem servers to specific directories only — never grant root access. Add <code>allowedDirectories</code> in the server config.",
+      "example": "{ \"allowedDirectories\": [\"/home/user/myapp\"] }",
       "link": "security.html"
     }
   ],
   "news": [
     {
       "day": "Monday",
-      "tip": "Claude Sonnet 4.5 is now the recommended model for Claude Code — best coding performance on SWE-bench to date.",
-      "link": "updates.html"
+      "tip": "Claude 4.6 family is live: Opus 4.6 for reasoning, Sonnet 4.6 as the new Claude Code default, Haiku 4.5 for fast tasks. Set in <code>~/.claude/settings.json</code>.",
+      "example": "{ \"model\": \"claude-sonnet-4-6\" }",
+      "link": null
     },
     {
       "day": "Tuesday",
-      "tip": "The Checkpoints feature lets you save session state with <code>/checkpoint save</code> and roll back instantly — no more lost work.",
-      "link": "updates.html"
+      "tip": "Fast mode (<code>/fast</code>) streams Opus 4.6 at higher throughput with no model downgrade — ideal for large file writes and repetitive refactoring sessions.",
+      "example": "/fast",
+      "link": null
     },
     {
       "day": "Wednesday",
-      "tip": "VS Code extension hit 100k+ installs in its first week — native inline diffs and sidebar chat now available.",
-      "link": "updates.html"
+      "tip": "The status line shows live model, token count, cost and directory in the terminal — updated after every tool call without needing /status.",
+      "example": "# Configure in ~/.claude/settings.json under the statusLine key",
+      "link": null
     },
     {
       "day": "Thursday",
-      "tip": "OpusPlan mode auto-routes planning tasks to Opus and implementation to Sonnet — cutting costs 40–60% automatically.",
-      "link": "updates.html"
+      "tip": "Auto-memory (MEMORY.md) persists project context across sessions automatically — no more re-explaining architecture at the start of every conversation.",
+      "example": "# Lives at ~/.claude/projects/<project>/memory/MEMORY.md",
+      "link": "claude-md.html"
     },
     {
       "day": "Friday",
-      "tip": "The MCP Marketplace now has 100+ pre-built servers — install postgres, stripe, or puppeteer with one command.",
-      "link": "updates.html"
+      "tip": "Parallel sub-agents are now supported — Claude launches multiple agents simultaneously in one response, cutting wall-clock time 3-5x for independent tasks.",
+      "example": "# Claude issues multiple Agent tool calls in a single message",
+      "link": "agents.html"
     },
     {
       "day": "Saturday",
-      "tip": "Claude Code Security Scanner (preview) reasons about vulnerabilities like a human researcher — auto-suggests patches too.",
-      "link": "updates.html"
+      "tip": "Worktree isolation gives each sub-agent its own git branch to work safely — auto-cleaned if no changes are made.",
+      "example": "Agent(isolation: \"worktree\", ...)",
+      "link": "agents.html"
     },
     {
       "day": "Sunday",
-      "tip": "The community awesome-claude-code-subagents repo has 3,000+ stars and 200+ ready-to-use agent definitions.",
-      "link": "updates.html"
+      "tip": "The MEMORY.md + Skills two-layer pattern: MEMORY.md = what Claude knows, Skills = what Claude does. Together they eliminate session warm-up time entirely.",
+      "example": "~/.claude/memory/MEMORY.md + .claude/skills/ReviewPR.md",
+      "link": "skills.html"
     }
   ]
 }
