@@ -197,50 +197,82 @@
           <div class="step" data-aos="fade-up" data-aos-delay="0">
             <div class="step-num">1</div>
             <div class="step-content">
-              <div class="step-title">Install via NPM (Recommended)</div>
-              <div class="step-body">Requires Node.js 18+. Run the following command in your terminal.</div>
+              <div class="step-title">Install via NPM</div>
+              <div class="step-body">Requires Node.js 18+.</div>
               <div class="code-block" style="margin-top:12px">
                 <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
                 <pre><code class="language-bash">npm install -g @anthropic-ai/claude-code</code></pre>
               </div>
             </div>
           </div>
-          <div class="step" data-aos="fade-up" data-aos-delay="100">
+          <div class="step" data-aos="fade-up" data-aos-delay="80">
             <div class="step-num">2</div>
             <div class="step-content">
-              <div class="step-title">Alternative — Binary Install</div>
-              <div class="step-body">For Linux/macOS without Node.js, or Windows PowerShell:</div>
-              <div class="code-block" style="margin-top:12px">
-                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
-                <pre><code class="language-bash"># Linux / macOS
-curl -fsSL https://claude.ai/install.sh | bash
-
-# Windows PowerShell
-irm https://claude.ai/install.ps1 | iex</code></pre>
-              </div>
-            </div>
-          </div>
-          <div class="step" data-aos="fade-up" data-aos-delay="200">
-            <div class="step-num">3</div>
-            <div class="step-content">
               <div class="step-title">Authenticate</div>
-              <div class="step-body">Run <code>claude</code> in your terminal. It opens a browser window to log in with your Anthropic account (Pro/Max/Team/Enterprise).</div>
+              <div class="step-body">Run <code>claude</code> — it opens a browser OAuth flow. No API key needed for Pro/Max/Team/Enterprise plans.</div>
               <div class="code-block" style="margin-top:12px">
                 <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
                 <pre><code class="language-bash">claude
-# → Opens browser → Log in → Returns to terminal</code></pre>
+# Opens browser → Log in → Returns to terminal</code></pre>
               </div>
             </div>
           </div>
-          <div class="step" data-aos="fade-up" data-aos-delay="300">
+          <div class="step" data-aos="fade-up" data-aos-delay="160">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Set Default Model</div>
+              <div class="step-body">Lock in the latest and best coding model explicitly.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">json — ~/.claude/settings.json</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-json">{ "model": "claude-sonnet-4-6" }</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="240">
             <div class="step-num">4</div>
             <div class="step-content">
-              <div class="step-title">Verify Installation</div>
-              <div class="step-body">Check the version and confirm everything is working.</div>
+              <div class="step-title">Init Your Project</div>
+              <div class="step-body">Claude reads your codebase and auto-generates a CLAUDE.md tailored to your stack.</div>
               <div class="code-block" style="margin-top:12px">
                 <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
-                <pre><code class="language-bash">claude --version
-# → Claude Code 1.x.x</code></pre>
+                <pre><code class="language-bash">cd your-project && claude /init</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="320">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Enable Auto-Compact</div>
+              <div class="step-body">Sessions auto-compact at 85% context — no more failed sessions at the limit.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">json — ~/.claude/settings.json</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-json">{ "model": "claude-sonnet-4-6", "autoCompact": true }</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="400">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">Set Up Status Line</div>
+              <div class="step-body">See model, token count, and cost after every tool call — never get surprised by a runaway session.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">json — ~/.claude/settings.json</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-json">{
+  "model": "claude-sonnet-4-6",
+  "autoCompact": true,
+  "statusLine": { "show": ["model", "tokens", "cost"] }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="480">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">Install VS Code Extension</div>
+              <div class="step-body">Search <strong>Claude Code</strong> in the VS Code Marketplace — inline diffs, sidebar chat, right-click file pinning.</div>
+              <div class="code-block" style="margin-top:12px">
+                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+                <pre><code class="language-bash">code --install-extension claudeai.claude-code</code></pre>
               </div>
             </div>
           </div>
