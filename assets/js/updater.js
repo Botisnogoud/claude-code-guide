@@ -4,10 +4,9 @@
  * Runs via Windows Task Scheduler at 7 AM daily.
  *
  * What it does:
- *   1. Fetches latest Claude Code news from Reddit + Anthropic RSS
- *   2. Deduplicates and merges into updates.json
+ *   1. Fetches latest Claude Code news from Reddit + Anthropic RSS + arXiv
+ *   2. Deduplicates and merges into updates.json (enforcing 5+5+5 structure)
  *   3. Deploys the full site to Netlify via the Files API
- *      (works for drag-and-drop sites — no git required)
  *
  * Setup: Run setup-daily-updater.ps1 once to install the Task Scheduler job.
  */
@@ -22,45 +21,30 @@ const crypto = require('crypto');
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 const CONFIG = {
-  // Netlify credentials — pre-configured
   netlifyToken:  process.env.NETLIFY_TOKEN  || 'nfp_56dxLWFD7tdFEKsaxHg82W8e9ePaFUPCd609',
   netlifySiteId: process.env.NETLIFY_SITE   || 'fde02b9f-c2f9-4a05-a6b7-22fb8044a47b',
-
-  // Site root (two levels up from assets/js/)
   siteRoot: path.join(__dirname, '..', '..'),
-
-  // Path to updates.json
   updatesJson: path.join(__dirname, '..', 'data', 'updates.json'),
-
-  // Log file on the Desktop
   logFile: path.join(
     process.env.USERPROFILE || process.env.HOME || '.',
     'Desktop',
     'claude-updater.log'
   ),
-
-  // Reddit JSON API (no auth needed for public subreddits)
-  redditUrl: 'https://www.reddit.com/r/ClaudeAI/search.json?q=claude+code&sort=new&t=day&limit=5',
-
-  // Anthropic RSS feed
+  redditUrl:    'https://www.reddit.com/r/ClaudeAI/search.json?q=claude+code&sort=new&t=day&limit=10',
   anthropicRss: 'https://www.anthropic.com/rss.xml',
-
-  // Max entries to keep in updates.json
-  maxEntries: 50,
-
-  // File extensions to include in Netlify deploy
+  arxivUrl:     'https://export.arxiv.org/api/query?search_query=ti:llm+agent+OR+ti:claude+OR+ti:language+model+tool&sortBy=submittedDate&sortOrder=descending&max_results=5',
+  maxPerCategory: 5,
   deployExts: new Set(['.html', '.css', '.js', '.json', '.txt', '.toml', '.ico', '.png', '.jpg', '.svg', '.webp']),
 };
 // ──────────────────────────────────────────────────────────────────────────────
 
-/** HTTPS/HTTP GET returning raw body string. Follows one redirect. */
 function fetchUrl(url, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const lib = url.startsWith('https') ? https : http;
     const req = lib.get(url, {
       headers: {
         'User-Agent': 'claude-code-guide-updater/1.0',
-        'Accept':     'application/json, application/rss+xml, text/xml, */*',
+        'Accept':     'application/json, application/atom+xml, application/rss+xml, text/xml, */*',
         ...extraHeaders,
       },
     }, (res) => {
@@ -81,7 +65,6 @@ function fetchUrl(url, extraHeaders = {}) {
   });
 }
 
-/** HTTPS request with body (for POST/PUT). Returns { status, body }. */
 function request(method, url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     const u = new URL(url);
@@ -90,10 +73,7 @@ function request(method, url, body, headers = {}) {
       hostname: u.hostname,
       path:     u.pathname + u.search,
       method,
-      headers: {
-        'Content-Length': buf.length,
-        ...headers,
-      },
+      headers: { 'Content-Length': buf.length, ...headers },
     };
     const req = https.request(opts, (res) => {
       let data = '';
@@ -106,16 +86,14 @@ function request(method, url, body, headers = {}) {
   });
 }
 
-/** SHA1 hex of a Buffer or string (Netlify uses SHA1 for file digests). */
 function sha1(data) {
   return crypto.createHash('sha1').update(data).digest('hex');
 }
 
-/** Walk a directory recursively, returning [{ absPath, relPath, ext }]. */
 function walkDir(dir, base = dir, results = []) {
   for (const entry of fs.readdirSync(dir)) {
-    if (entry.startsWith('.')) continue;          // skip hidden
-    const abs = path.join(dir, entry);
+    if (entry.startsWith('.')) continue;
+    const abs  = path.join(dir, entry);
     const stat = fs.statSync(abs);
     if (stat.isDirectory()) {
       walkDir(abs, base, results);
@@ -130,16 +108,15 @@ function walkDir(dir, base = dir, results = []) {
   return results;
 }
 
-/** Deploy all site files to Netlify using the File Digest API. */
 async function deployToNetlify() {
   const token  = CONFIG.netlifyToken;
   const siteId = CONFIG.netlifySiteId;
   const authH  = { Authorization: `Bearer ${token}` };
 
-  log('Scanning site files…');
+  log('Scanning site files\u2026');
   const files    = walkDir(CONFIG.siteRoot);
-  const fileMap  = {};      // relPath → { digest, absPath, buf }
-  const filesReq = {};      // for deploy request: { relPath: digest }
+  const fileMap  = {};
+  const filesReq = {};
 
   for (const f of files) {
     const buf    = fs.readFileSync(f.absPath);
@@ -149,8 +126,7 @@ async function deployToNetlify() {
   }
   log(`Found ${files.length} files to deploy`);
 
-  // Step 1 — Create a new deploy (returns list of files Netlify needs uploaded)
-  log('Creating Netlify deploy…');
+  log('Creating Netlify deploy\u2026');
   const createRes = await request(
     'POST',
     `https://api.netlify.com/api/v1/sites/${siteId}/deploys`,
@@ -159,28 +135,26 @@ async function deployToNetlify() {
   );
 
   if (createRes.status !== 200 && createRes.status !== 201) {
-    throw new Error(`Deploy create failed: HTTP ${createRes.status} — ${createRes.body.slice(0, 300)}`);
+    throw new Error(`Deploy create failed: HTTP ${createRes.status} \u2014 ${createRes.body.slice(0, 300)}`);
   }
 
-  const deploy = JSON.parse(createRes.body);
+  const deploy   = JSON.parse(createRes.body);
   const deployId = deploy.id;
-  const required = deploy.required || [];   // SHA1s of files Netlify needs
-  log(`Deploy ID: ${deployId} — Netlify needs ${required.length} file(s) uploaded`);
+  const required = deploy.required || [];
+  log(`Deploy ID: ${deployId} \u2014 Netlify needs ${required.length} file(s) uploaded`);
 
-  // Build a reverse map: digest → file info (for files Netlify requires)
   const digestToFile = {};
   for (const [relPath, info] of Object.entries(fileMap)) {
     digestToFile[info.digest] = { relPath, buf: info.buf };
   }
 
-  // Step 2 — Upload only the files Netlify says it doesn't have yet
   for (const neededDigest of required) {
     const fileInfo = digestToFile[neededDigest];
     if (!fileInfo) {
       log(`WARN: Netlify requested digest ${neededDigest} but no matching file found`);
       continue;
     }
-    log(`Uploading ${fileInfo.relPath} (${fileInfo.buf.length} bytes)…`);
+    log(`Uploading ${fileInfo.relPath} (${fileInfo.buf.length} bytes)\u2026`);
     const uploadRes = await request(
       'PUT',
       `https://api.netlify.com/api/v1/deploys/${deployId}/files${fileInfo.relPath}`,
@@ -192,11 +166,10 @@ async function deployToNetlify() {
     }
   }
 
-  log(`Deploy complete → https://profound-nougat-7e25e0.netlify.app`);
+  log(`Deploy complete \u2192 https://profound-nougat-7e25e0.netlify.app`);
   return deployId;
 }
 
-/** Parse Reddit JSON API response into update entries. */
 function parseRedditPosts(jsonStr) {
   try {
     const data  = JSON.parse(jsonStr);
@@ -208,19 +181,18 @@ function parseRedditPosts(jsonStr) {
       sourceUrl: `https://reddit.com${p.permalink}`,
       readTime:  '3 min',
       title:     truncate(p.title, 90),
-      icon:      '💬',
+      icon:      '\ud83d\udcac',
       excerpt:   p.selftext
         ? truncate(p.selftext.replace(/\n/g, ' '), 180)
-        : `Reddit post — "${truncate(p.title, 60)}"`,
-      content:   null,
+        : `Reddit post \u2014 "${truncate(p.title, 60)}"`,
+      content: null,
     }));
   } catch (e) {
-    log(`WARN: Failed to parse Reddit — ${e.message}`);
+    log(`WARN: Failed to parse Reddit \u2014 ${e.message}`);
     return [];
   }
 }
 
-/** Parse Anthropic RSS XML into update entries. */
 function parseRssFeed(xmlStr) {
   try {
     const items = [];
@@ -242,14 +214,69 @@ function parseRssFeed(xmlStr) {
         sourceUrl: link || 'https://www.anthropic.com/news',
         readTime:  '3 min',
         title:     truncate(title.replace(/<[^>]+>/g, ''), 90),
-        icon:      '📰',
+        icon:      '\ud83d\udcf0',
         excerpt:   truncate((desc || '').replace(/<[^>]+>/g, '').replace(/\n/g, ' '), 200),
         content:   null,
       });
     }
     return items;
   } catch (e) {
-    log(`WARN: Failed to parse RSS — ${e.message}`);
+    log(`WARN: Failed to parse RSS \u2014 ${e.message}`);
+    return [];
+  }
+}
+
+/** Parse arXiv Atom XML into research entries. */
+function parseArxivFeed(xmlStr) {
+  try {
+    const entries = [];
+    const entryRx = /<entry>([\s\S]*?)<\/entry>/g;
+    let m;
+    while ((m = entryRx.exec(xmlStr)) !== null) {
+      const block    = m[1];
+      const title    = extractTag(block, 'title').replace(/\s+/g, ' ').trim();
+      const summary  = extractTag(block, 'summary').replace(/\s+/g, ' ').trim();
+      const pubDate  = extractTag(block, 'published');
+      const idTag    = extractTag(block, 'id');
+
+      // Extract arXiv ID from URL like http://arxiv.org/abs/2407.01489v1
+      const idMatch  = idTag.match(/abs\/([\d.]+)/);
+      const arxivId  = idMatch ? idMatch[1] : '';
+      const arxivUrl = arxivId ? `https://arxiv.org/abs/${arxivId}` : idTag;
+
+      // Extract authors
+      const authorRx = /<name>([\s\S]*?)<\/name>/g;
+      const authors  = [];
+      let am;
+      while ((am = authorRx.exec(block)) !== null && authors.length < 3) {
+        authors.push(am[1].trim());
+      }
+      const authorsStr = authors.length > 0
+        ? authors.slice(0, 2).join(', ') + (authors.length > 2 ? ' et al.' : '')
+        : 'Unknown authors';
+
+      let isoDate = new Date().toISOString().slice(0, 10);
+      try { isoDate = new Date(pubDate).toISOString().slice(0, 10); } catch (_) {}
+
+      if (!title) continue;
+      entries.push({
+        date:      isoDate,
+        category:  'research',
+        source:    'arxiv',
+        sourceUrl: arxivUrl,
+        arxivUrl:  arxivUrl,
+        readTime:  '12 min',
+        title:     truncate(title, 100),
+        icon:      '\ud83d\udcc4',
+        authors:   authorsStr,
+        abstract:  truncate(summary, 400),
+        excerpt:   truncate(summary, 180),
+        content:   null,
+      });
+    }
+    return entries;
+  } catch (e) {
+    log(`WARN: Failed to parse arXiv \u2014 ${e.message}`);
     return [];
   }
 }
@@ -262,14 +289,14 @@ function extractTag(str, tag) {
 }
 
 function truncate(str, max) {
-  return str.length > max ? str.slice(0, max - 1) + '…' : str;
+  return str.length > max ? str.slice(0, max - 1) + '\u2026' : str;
 }
 
 function loadExisting() {
   try {
     return JSON.parse(fs.readFileSync(CONFIG.updatesJson, 'utf8'));
   } catch (e) {
-    log(`WARN: Could not read updates.json — starting fresh. (${e.message})`);
+    log(`WARN: Could not read updates.json \u2014 starting fresh. (${e.message})`);
     return { updates: [] };
   }
 }
@@ -284,6 +311,24 @@ function deduplicate(all) {
   });
 }
 
+/**
+ * Enforce 5+5+5 structure:
+ * Top 5 research, top 5 official/feature, top 5 community — exactly 15 total.
+ * Within each bucket, pinned/existing curated items take precedence.
+ */
+function enforce5x5x5(all) {
+  const byDate = (a, b) => new Date(b.date) - new Date(a.date);
+
+  const research  = all.filter(u => u.category === 'research')
+                       .sort(byDate).slice(0, CONFIG.maxPerCategory);
+  const official  = all.filter(u => ['release','feature','update','security'].includes(u.category))
+                       .sort(byDate).slice(0, CONFIG.maxPerCategory);
+  const community = all.filter(u => u.category === 'community')
+                       .sort(byDate).slice(0, CONFIG.maxPerCategory);
+
+  return [...research, ...official, ...community];
+}
+
 function save(data) {
   fs.writeFileSync(CONFIG.updatesJson, JSON.stringify(data, null, 2), 'utf8');
   log(`Saved ${data.updates.length} entries to updates.json`);
@@ -295,7 +340,6 @@ function log(msg) {
   try { fs.appendFileSync(CONFIG.logFile, line); } catch (_) {}
 }
 
-/** Main */
 async function main() {
   log('=== Claude Code Guide Updater starting ===');
 
@@ -303,45 +347,54 @@ async function main() {
   const newItems = [];
 
   // Fetch Reddit posts
-  log('Fetching Reddit r/ClaudeAI posts…');
+  log('Fetching Reddit r/ClaudeAI posts\u2026');
   try {
     const body  = await fetchUrl(CONFIG.redditUrl);
     const posts = parseRedditPosts(body);
     log(`Reddit: found ${posts.length} posts`);
     newItems.push(...posts);
   } catch (e) {
-    log(`ERROR: Reddit fetch failed — ${e.message}`);
+    log(`ERROR: Reddit fetch failed \u2014 ${e.message}`);
   }
 
   // Fetch Anthropic RSS
-  log('Fetching Anthropic RSS feed…');
+  log('Fetching Anthropic RSS feed\u2026');
   try {
     const body  = await fetchUrl(CONFIG.anthropicRss);
     const posts = parseRssFeed(body);
     log(`RSS: found ${posts.length} items`);
     newItems.push(...posts);
   } catch (e) {
-    log(`ERROR: RSS fetch failed — ${e.message}`);
+    log(`ERROR: RSS fetch failed \u2014 ${e.message}`);
   }
 
-  // Merge + save
+  // Fetch arXiv papers
+  log('Fetching arXiv LLM agent papers\u2026');
+  try {
+    const body    = await fetchUrl(CONFIG.arxivUrl);
+    const papers  = parseArxivFeed(body);
+    log(`arXiv: found ${papers.length} papers`);
+    newItems.push(...papers);
+  } catch (e) {
+    log(`ERROR: arXiv fetch failed \u2014 ${e.message}`);
+  }
+
+  // Merge, deduplicate, enforce 5+5+5
   if (newItems.length > 0) {
-    const combined = deduplicate([...newItems, ...existing.updates]);
-    const trimmed  = combined
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
-      .slice(0, CONFIG.maxEntries);
-    log(`Merged: ${trimmed.length - existing.updates.length > 0 ? '+' + (trimmed.length - existing.updates.length) : 'no'} new entries`);
-    save({ updates: trimmed });
+    const combined  = deduplicate([...newItems, ...existing.updates]);
+    const enforced  = enforce5x5x5(combined);
+    log(`Enforced 5+5+5 structure: ${enforced.length} total entries`);
+    save({ updates: enforced });
   } else {
-    log('No new items — updates.json unchanged');
+    log('No new items \u2014 updates.json unchanged');
   }
 
   // Deploy to Netlify
-  log('Deploying to Netlify…');
+  log('Deploying to Netlify\u2026');
   try {
     await deployToNetlify();
   } catch (e) {
-    log(`ERROR: Netlify deploy failed — ${e.message}`);
+    log(`ERROR: Netlify deploy failed \u2014 ${e.message}`);
   }
 
   log('=== Done ===');
