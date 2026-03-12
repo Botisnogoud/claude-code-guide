@@ -2,133 +2,126 @@
   "setup": [
     {
       "day": "Monday",
-      "tip": "Start every project with <code>claude init</code> to auto-generate a CLAUDE.md scaffold based on your repo.",
-      "example": "claude init",
-      "link": "claude-md.html"
+      "tip": "Use <code>claude --model claude-sonnet-4-6</code> \u2014 the newest default. Faster and better than Sonnet 4.5 for code tasks. Set permanently: <code>{ \"model\": \"claude-sonnet-4-6\" }</code> in ~/.claude/settings.json",
+      "example": "claude --model claude-sonnet-4-6",
+      "link": null
     },
     {
       "day": "Tuesday",
-      "tip": "Use <code>claude --model claude-haiku-4-5-20251001</code> for quick boilerplate tasks — it's 10× faster and cheaper.",
-      "example": "claude --model claude-haiku-4-5-20251001 \"generate getters and setters for User.ts\"",
-      "link": "tokens.html"
+      "tip": "Run <code>claude /init</code> in any repo \u2014 Claude reads your codebase and auto-generates a CLAUDE.md tailored to your stack. Best starting point for any new project.",
+      "example": "cd your-project && claude /init",
+      "link": "claude-md.html"
     },
     {
       "day": "Wednesday",
-      "tip": "Authenticate once with OAuth and never worry about token rotation. Requires Pro/Max/Team plan.",
-      "example": "claude setup-token",
-      "link": "github.html"
+      "tip": "Add <code>ANTHROPIC_SMALL_FAST_MODEL=claude-haiku-4-5-20251001</code> to settings.json \u2014 Claude uses this for background tasks like file search, saving 80% on those calls automatically.",
+      "example": "{ \"env\": { \"ANTHROPIC_SMALL_FAST_MODEL\": \"claude-haiku-4-5-20251001\" } }",
+      "link": "tokens.html"
     },
     {
       "day": "Thursday",
-      "tip": "Pin your Node.js version in <code>.nvmrc</code> so Claude always uses the same runtime as your project.",
-      "example": "echo '18.19.0' > .nvmrc",
+      "tip": "Install the VS Code extension (claudeai.claude-code) \u2014 inline diffs, sidebar chat, right-click any file to pin it to Claude's context. Eliminates constant copy-pasting.",
+      "example": "# Search 'Claude Code' in VS Code marketplace",
       "link": null
     },
     {
       "day": "Friday",
-      "tip": "Run <code>claude --version</code> to confirm your install, then <code>claude update</code> to get the latest.",
-      "example": "claude update",
-      "link": null
+      "tip": "Set <code>\"autoCompact\": true</code> in settings.json \u2014 sessions auto-compact at 85% context, continuing seamlessly instead of failing at the limit.",
+      "example": "{ \"autoCompact\": true }",
+      "link": "tokens.html"
     },
     {
       "day": "Saturday",
-      "tip": "The <code>~/.claude/settings.json</code> file sets your global defaults across all projects — set your preferred model there.",
-      "example": "{ \"env\": { \"ANTHROPIC_SMALL_FAST_MODEL\": \"claude-haiku-4-5-20251001\" } }",
-      "link": "security.html"
+      "tip": "Use <code>claude --print \"explain this function\" | pbcopy</code> for quick non-interactive lookups \u2014 pipe the output anywhere without starting a full session.",
+      "example": "claude --print \"summarize this file\" > summary.txt",
+      "link": null
     },
     {
       "day": "Sunday",
-      "tip": "Use <code>claude --print</code> flag for non-interactive output — great for piping Claude's response to a file or another command.",
-      "example": "claude --print \"summarize this codebase\" > summary.txt",
+      "tip": "Configure the status line to show model + tokens + cost: <code>\"statusLine\": { \"show\": [\"model\",\"tokens\",\"cost\"] }</code> \u2014 you'll immediately catch runaway sessions.",
+      "example": "{ \"statusLine\": { \"show\": [\"model\",\"tokens\",\"cost\"] } }",
       "link": null
     }
   ],
   "practices": [
     {
       "day": "Monday",
-      "tip": "Store MEMORY.md per project in <code>~/.claude/projects/&lt;project&gt;/memory/</code> — Claude reads it at every session start and updates it automatically. Organise by topic, not date.",
-      "example": "## Architecture\nWe use server components by default. Client components only when state is needed.",
-      "link": "claude-md.html"
+      "tip": "MEMORY.md = project long-term memory. Create <code>~/.claude/projects/&lt;project&gt;/memory/MEMORY.md</code>, organised by topic (Architecture, Key Paths, Gotchas, User Preferences). Claude reads it at every session start.",
+      "example": "mkdir -p ~/.claude/projects/myapp/memory && touch ~/.claude/projects/myapp/memory/MEMORY.md",
+      "link": null
     },
     {
       "day": "Tuesday",
-      "tip": "Name your Skills with action verbs (ReviewPR.md, RunMigration.md) — Claude triggers them more reliably than noun-based names.",
-      "example": "mkdir -p .claude/skills && touch .claude/skills/ReviewPR.md",
-      "link": "skills.html"
+      "tip": "Write CLAUDE.md for YOUR stack, not generic advice. Claude already knows React \u2014 document YOUR patterns, YOUR naming conventions, YOUR non-obvious decisions. One specific line beats five generic ones.",
+      "example": "## Why We Avoid useEffect\nWe use React Query for all async state. useEffect is banned except for DOM side-effects.",
+      "link": "claude-md.html"
     },
     {
       "day": "Wednesday",
-      "tip": "Use <code>deny: [\"Bash(rm -rf*)\", \"Bash(git push --force*)\"]</code> in settings.json — block destructive commands at the permission layer, not just in CLAUDE.md.",
-      "example": "{ \"permissions\": { \"deny\": [\"Bash(rm -rf*)\", \"Bash(git push --force*)\"] } }",
+      "tip": "Never use <code>withInternet: true</code> on WiFi connect calls in mobile apps \u2014 Android silently falls back to cellular when it detects a captive portal, causing false-positive internet checks. Always <code>withInternet: false</code>.",
+      "example": "# In CLAUDE.md: NEVER revert withInternet: false to withInternet: true",
       "link": "security.html"
     },
     {
       "day": "Thursday",
-      "tip": "Give agents the minimum tools they need. A code-reviewer only needs Read, Glob, Grep — never Write or Bash. Least-privilege by default.",
-      "example": "tools:\n  - Read\n  - Glob\n  - Grep",
+      "tip": "Parallel agents = free speedup. When tasks are independent (test scan + security scan + docs), issue multiple Agent tool calls in one message. Claude runs them simultaneously, 3-5x faster.",
+      "example": "tools:\n  - Agent(test-runner)\n  - Agent(security-scanner)\n  - Agent(doc-writer)",
       "link": "agents.html"
     },
     {
       "day": "Friday",
-      "tip": "Run <code>/compact</code> before switching tasks in the same session — saves 5k–20k tokens and keeps Claude focused on the new task only.",
-      "example": "/compact \"auth bug fixed, now starting payment flow\"",
-      "link": "tokens.html"
-    },
-    {
-      "day": "Saturday",
-      "tip": "Use parallel sub-agents for independent work — launch multiple Agent calls in one message. Each runs simultaneously, reducing wall-clock time by 3-5x on parallelisable tasks.",
-      "example": "# Claude issues multiple Agent tool calls in a single message",
+      "tip": "Use worktree isolation (<code>isolation: \"worktree\"</code>) for risky agents \u2014 each gets its own git branch. Auto-cleaned if no changes. Your main branch is always safe.",
+      "example": "isolation: worktree",
       "link": "agents.html"
     },
     {
+      "day": "Saturday",
+      "tip": "Skills > CLAUDE.md for procedures. CLAUDE.md should say WHAT your project is. Skills should say HOW to do things (deploy, PR, migrate DB). Separation of concerns saves thousands of tokens per session.",
+      "example": "# Skills: Deploy.md, CreatePR.md, MigrateDB.md",
+      "link": "skills.html"
+    },
+    {
       "day": "Sunday",
-      "tip": "Scope MCP filesystem servers to specific directories only — never grant root access. Add <code>allowedDirectories</code> in the server config.",
-      "example": "{ \"allowedDirectories\": [\"/home/user/myapp\"] }",
+      "tip": "Deny list beats permission prompts. Set <code>\"deny\": [\"Bash(rm -rf*)\", \"Bash(git push --force*)\"]</code> in settings.json \u2014 dangerous commands are blocked silently without interrupting flow.",
+      "example": "{ \"permissions\": { \"deny\": [\"Bash(rm -rf*)\", \"Bash(git push --force*)\"] } }",
       "link": "security.html"
     }
   ],
   "news": [
     {
       "day": "Monday",
-      "tip": "Claude 4.6 family is live: Opus 4.6 for reasoning, Sonnet 4.6 as the new Claude Code default, Haiku 4.5 for fast tasks. Set in <code>~/.claude/settings.json</code>.",
-      "example": "{ \"model\": \"claude-sonnet-4-6\" }",
-      "link": null
+      "tip": "Claude Sonnet 4.6 is the new default \u2014 set it explicitly in settings.json to guarantee you're always on the best coding model.",
+      "link": "updates.html"
     },
     {
       "day": "Tuesday",
-      "tip": "Fast mode (<code>/fast</code>) streams Opus 4.6 at higher throughput with no model downgrade — ideal for large file writes and repetitive refactoring sessions.",
-      "example": "/fast",
-      "link": null
+      "tip": "/fast mode on Opus 4.6 = same quality, significantly faster output. Toggle mid-session without losing context.",
+      "link": "updates.html"
     },
     {
       "day": "Wednesday",
-      "tip": "The status line shows live model, token count, cost and directory in the terminal — updated after every tool call without needing /status.",
-      "example": "# Configure in ~/.claude/settings.json under the statusLine key",
-      "link": null
+      "tip": "Auto-memory (MEMORY.md) means Claude remembers your architecture, preferences, and key files across all future sessions automatically.",
+      "link": "updates.html"
     },
     {
       "day": "Thursday",
-      "tip": "Auto-memory (MEMORY.md) persists project context across sessions automatically — no more re-explaining architecture at the start of every conversation.",
-      "example": "# Lives at ~/.claude/projects/<project>/memory/MEMORY.md",
-      "link": "claude-md.html"
+      "tip": "Parallel sub-agents: Claude can now run multiple agents simultaneously in one response \u2014 test coverage + security scan + docs in parallel, not sequentially.",
+      "link": "updates.html"
     },
     {
       "day": "Friday",
-      "tip": "Parallel sub-agents are now supported — Claude launches multiple agents simultaneously in one response, cutting wall-clock time 3-5x for independent tasks.",
-      "example": "# Claude issues multiple Agent tool calls in a single message",
-      "link": "agents.html"
+      "tip": "Worktree isolation gives each sub-agent its own safe git branch \u2014 auto-cleaned on no changes, never risks your working branch.",
+      "link": "updates.html"
     },
     {
       "day": "Saturday",
-      "tip": "Worktree isolation gives each sub-agent its own git branch to work safely — auto-cleaned if no changes are made.",
-      "example": "Agent(isolation: \"worktree\", ...)",
-      "link": "agents.html"
+      "tip": "The status line shows live cost, tokens, and model after every tool call \u2014 configure it to never be surprised by a runaway session again.",
+      "link": "updates.html"
     },
     {
       "day": "Sunday",
-      "tip": "The MEMORY.md + Skills two-layer pattern: MEMORY.md = what Claude knows, Skills = what Claude does. Together they eliminate session warm-up time entirely.",
-      "example": "~/.claude/memory/MEMORY.md + .claude/skills/ReviewPR.md",
-      "link": "skills.html"
+      "tip": "Research insight: SWE-agent proves tool interface design matters as much as model choice. Give Claude lean, purposeful tools and watch reliability jump.",
+      "link": "updates.html"
     }
   ]
 }
