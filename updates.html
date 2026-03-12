@@ -14,7 +14,6 @@
       flex-wrap: wrap;
       margin-bottom: 32px;
     }
-
     .filter-btn {
       padding: 7px 18px;
       border-radius: 20px;
@@ -26,27 +25,24 @@
       cursor: pointer;
       transition: all var(--transition);
     }
-
     .filter-btn:hover,
     .filter-btn.active {
       background: rgba(0,212,255,0.12);
       border-color: var(--accent-cyan);
       color: var(--accent-cyan);
     }
-
-    .filter-btn[data-filter="release"].active { background:rgba(16,185,129,0.12); border-color:var(--accent-green); color:var(--accent-green); }
-    .filter-btn[data-filter="feature"].active { background:rgba(0,212,255,0.12); border-color:var(--accent-cyan); color:var(--accent-cyan); }
-    .filter-btn[data-filter="update"].active  { background:rgba(124,58,237,0.12); border-color:var(--accent-purple); color:var(--accent-purple); }
+    .filter-btn[data-filter="release"].active  { background:rgba(16,185,129,0.12); border-color:var(--accent-green); color:var(--accent-green); }
+    .filter-btn[data-filter="feature"].active  { background:rgba(0,212,255,0.12); border-color:var(--accent-cyan); color:var(--accent-cyan); }
+    .filter-btn[data-filter="update"].active   { background:rgba(124,58,237,0.12); border-color:var(--accent-purple); color:var(--accent-purple); }
     .filter-btn[data-filter="security"].active { background:rgba(239,68,68,0.12); border-color:var(--accent-red); color:var(--accent-red); }
-    .filter-btn[data-filter="community"].active { background:rgba(245,158,11,0.12); border-color:var(--accent-orange); color:var(--accent-orange); }
-
+    .filter-btn[data-filter="community"].active{ background:rgba(245,158,11,0.12); border-color:var(--accent-orange); color:var(--accent-orange); }
+    .filter-btn[data-filter="research"].active { background:rgba(124,58,237,0.12); border-color:var(--accent-purple); color:var(--accent-purple); }
     .updates-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
     }
-
     .live-badge {
       display: flex;
       align-items: center;
@@ -54,11 +50,205 @@
       font-size: 0.78rem;
       color: var(--text-muted);
     }
+    /* ── Digest Tabs ─────────────────────────────────── */
+    .digest-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .digest-tab {
+      padding: 8px 20px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -1px;
+    }
+    .digest-tab.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .digest-panel { display: none; padding: 12px 0 0; }
+    .digest-panel.active { display: block; }
+    .digest-ranked-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .digest-ranked-item:last-child { border-bottom: none; }
+    .digest-rank {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 20px;
+      padding-top: 2px;
+    }
+    .digest-item-icon { font-size: 1rem; min-width: 20px; }
+    .digest-item-body { flex: 1; min-width: 0; }
+    .digest-item-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .digest-item-title:hover { color: var(--accent-cyan); }
+    .digest-item-excerpt {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .digest-source-badge {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-top: 3px;
+      display: inline-block;
+    }
+    .dsb-arxiv    { background:rgba(124,58,237,0.15); color:#a78bfa; }
+    .dsb-official { background:rgba(16,185,129,0.15); color:#10b981; }
+    .dsb-reddit   { background:rgba(245,158,11,0.15); color:#f59e0b; }
+    .dsb-community{ background:rgba(245,158,11,0.15); color:#f59e0b; }
+    /* ── Research Cards ───────────────────────────────── */
+    .research-card {
+      background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(124,58,237,0.03));
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .research-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      box-shadow: 0 4px 24px rgba(124,58,237,0.12);
+    }
+    .research-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+    .research-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .research-title:hover { color: #a78bfa; }
+    .research-year-badge {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 10px;
+      background: rgba(124,58,237,0.2);
+      color: #a78bfa;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .research-authors {
+      font-size: 0.80rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .research-abstract {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .research-insight {
+      background: rgba(0,212,255,0.07);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .research-insight strong { color: var(--accent-cyan); }
+    .research-read-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 8px;
+      color: #a78bfa;
+      font-size: 0.80rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .research-read-btn:hover {
+      background: rgba(124,58,237,0.25);
+      border-color: rgba(124,58,237,0.5);
+    }
+    /* ── Practical Examples ───────────────────────────── */
+    .examples-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .example-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .example-card-header {
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .example-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0,212,255,0.15);
+      color: var(--accent-cyan);
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .example-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .example-card .code-block {
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      border-top: none;
+    }
   </style>
 </head>
 <body>
 
-<button class="menu-toggle">☰</button>
+<button class="menu-toggle">&#9776;</button>
 <div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
 
 <div class="layout">
@@ -69,40 +259,38 @@
     </div>
     <div class="sidebar-nav">
       <div class="nav-label">Basic Setup</div>
-      <a href="index.html"><span class="nav-icon">🏠</span> Home & Setup</a>
-      <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <a href="index.html"><span class="nav-icon">&#127968;</span> Home &amp; Setup</a>
+      <a href="github.html"><span class="nav-icon">&#128025;</span> GitHub Integration</a>
       <div class="sidebar-daily" id="sd-setup">
         <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
-          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+          <span>&#128197; Today's Tip</span><span class="sidebar-daily-chevron">&#9662;</span>
         </div>
         <div class="sidebar-daily-body">
-          <div id="sd-tip-setup" class="sidebar-daily-content">Loading…</div>
+          <div id="sd-tip-setup" class="sidebar-daily-content">Loading&#8230;</div>
         </div>
       </div>
-
       <div class="nav-label">Best Practices</div>
-      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
-      <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
-      <a href="security.html"><span class="nav-icon">🔒</span> Security Settings</a>
-      <a href="agents.html"><span class="nav-icon">🤖</span> Custom Agents</a>
-      <a href="tokens.html"><span class="nav-icon">💰</span> Token Optimization</a>
+      <a href="claude-md.html"><span class="nav-icon">&#128196;</span> CLAUDE.md</a>
+      <a href="skills.html"><span class="nav-icon">&#9889;</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">&#128274;</span> Security Settings</a>
+      <a href="agents.html"><span class="nav-icon">&#129302;</span> Custom Agents</a>
+      <a href="tokens.html"><span class="nav-icon">&#128176;</span> Token Optimization</a>
       <div class="sidebar-daily" id="sd-practices">
         <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
-          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+          <span>&#128161; Live Example</span><span class="sidebar-daily-chevron">&#9662;</span>
         </div>
         <div class="sidebar-daily-body">
-          <div id="sd-tip-practices" class="sidebar-daily-content">Loading…</div>
+          <div id="sd-tip-practices" class="sidebar-daily-content">Loading&#8230;</div>
         </div>
       </div>
-
-      <div class="nav-label">News & Updates</div>
-      <a href="updates.html" class="active"><span class="nav-icon">📰</span> Daily Updates</a>
+      <div class="nav-label">News &amp; Updates</div>
+      <a href="updates.html" class="active"><span class="nav-icon">&#128240;</span> Daily Updates</a>
       <div class="sidebar-daily" id="sd-news">
         <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
-          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+          <span>&#128308; Live Feed</span><span class="sidebar-daily-chevron">&#9662;</span>
         </div>
         <div class="sidebar-daily-body">
-          <div id="sd-tip-news" class="sidebar-daily-content">Loading…</div>
+          <div id="sd-tip-news" class="sidebar-daily-content">Loading&#8230;</div>
         </div>
       </div>
     </div>
@@ -113,57 +301,286 @@
       <canvas id="hero-canvas" class="hero-canvas"></canvas>
       <div class="hero-badge"><span class="pulse-dot"></span> &nbsp;Updated Daily</div>
       <h1 class="hero-title">Claude Code<br>Latest Updates</h1>
-      <p class="hero-desc">Stay ahead with the latest releases, features, security updates, and community highlights from the Claude Code ecosystem.</p>
+      <p class="hero-desc">Stay ahead with the latest releases, research, features, and community highlights from the Claude Code ecosystem.</p>
     </section>
 
     <div class="content-area">
 
+      <!-- ════════════════════════════════════════════════
+           SECTION A — TODAY'S DIGEST (15-item tabbed)
+           ════════════════════════════════════════════════ -->
+      <section class="section">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Today's Digest</span></div>
+        <h2 class="section-title" data-aos="fade-up">Top 15 — Ranked by Relevance</h2>
+        <div class="digest-box" data-aos="fade-up">
+          <div class="digest-tabs">
+            <button class="digest-tab active" onclick="switchDigestTab('research',this)">&#128196; Research (5)</button>
+            <button class="digest-tab" onclick="switchDigestTab('articles',this)">&#128240; Articles (5)</button>
+            <button class="digest-tab" onclick="switchDigestTab('community',this)">&#128172; Community (5)</button>
+          </div>
+          <div id="digest-research" class="digest-panel active"></div>
+          <div id="digest-articles" class="digest-panel"></div>
+          <div id="digest-community" class="digest-panel"></div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ════════════════════════════════════════════════
+           SECTION B — RESEARCH PAPERS
+           ════════════════════════════════════════════════ -->
+      <section class="section">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Research Papers</span></div>
+        <h2 class="section-title" data-aos="fade-up">The Science Behind Claude Code</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:28px" data-aos="fade-up">Five foundational papers that explain how and why Claude Code's agent patterns work — with practical takeaways for each.</p>
+        <div id="research-papers"></div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ════════════════════════════════════════════════
+           SECTION C — LIVE PRACTICAL EXAMPLES
+           ════════════════════════════════════════════════ -->
+      <section class="section">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Practical Examples</span></div>
+        <h2 class="section-title" data-aos="fade-up">Copy-Paste Patterns That Work Today</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:28px" data-aos="fade-up">Five real configurations you can drop into any project right now.</p>
+
+        <div class="examples-grid">
+
+          <!-- Example 1: MEMORY.md starter -->
+          <div class="example-card" data-aos="fade-up">
+            <div class="example-card-header">
+              <div class="example-num">1</div>
+              <div class="example-title">MEMORY.md Starter Template</div>
+            </div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">markdown — ~/.claude/projects/&lt;project&gt;/memory/MEMORY.md</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-markdown"># MEMORY.md
+Persistent memory for Claude Code sessions in &lt;project&gt;
+
+## Architecture
+- Stack: Next.js 14 (App Router) + PostgreSQL + Prisma ORM
+- Auth: NextAuth.js with Google + GitHub providers
+- Hosting: Vercel (frontend) + Railway (DB)
+
+## Key File Paths
+- DB schema: prisma/schema.prisma
+- Auth config: src/lib/auth.ts
+- API routes: src/app/api/
+- Shared types: src/types/index.ts
+
+## Gotchas
+- NEVER use useEffect for data fetching — use React Query
+- DB migrations require: npx prisma migrate dev --name &lt;name&gt;
+- Environment: .env.local (gitignored), .env.example (committed)
+
+## User Preferences
+- No auto-commit under any circumstances
+- Always run: npm run lint &amp;&amp; npm run typecheck before finishing
+- Prefer named exports over default exports</code></pre>
+            </div>
+          </div>
+
+          <!-- Example 2: Parallel agents -->
+          <div class="example-card" data-aos="fade-up">
+            <div class="example-card-header">
+              <div class="example-num">2</div>
+              <div class="example-title">Parallel Agents Pattern</div>
+            </div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">markdown — .claude/agents/parallel-qa.md</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-markdown">---
+name: parallel-qa
+description: Runs test scan, security scan, and doc check simultaneously
+tools:
+  - Agent
+  - Read
+  - Glob
+isolation: worktree
+---
+
+# Parallel QA Agent
+
+Run all three checks simultaneously. Do NOT run sequentially.
+
+## Step 1 — Fan Out (all three in one response)
+Invoke these three agents in parallel:
+1. Agent: test-runner — run full test suite, report failures
+2. Agent: security-scanner — check for hardcoded secrets, SQL injection, XSS
+3. Agent: doc-checker — verify all exported functions have JSDoc comments
+
+## Step 2 — Merge Results
+Wait for all three to complete, then produce a single report:
+- PASS / FAIL status per check
+- Actionable list of issues (file:line for each)
+- Overall verdict: READY TO MERGE or NEEDS FIXES</code></pre>
+            </div>
+          </div>
+
+          <!-- Example 3: PostToolUse hook -->
+          <div class="example-card" data-aos="fade-up">
+            <div class="example-card-header">
+              <div class="example-num">3</div>
+              <div class="example-title">PostToolUse Hook — Auto Test Runner</div>
+            </div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">json — .claude/settings.json</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-json">{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint --silent &amp;&amp; npm run typecheck --silent",
+            "timeout": 30000,
+            "onFailure": "notify"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "filePattern": "**/*.test.ts",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx jest --testPathPattern="$CLAUDE_TOOL_FILE" --passWithNoTests",
+            "timeout": 60000,
+            "onFailure": "ask_claude_to_fix"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- Example 4: Minimal agent file -->
+          <div class="example-card" data-aos="fade-up">
+            <div class="example-card-header">
+              <div class="example-num">4</div>
+              <div class="example-title">Minimal Agent File — Least-Privilege Pattern</div>
+            </div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">markdown — .claude/agents/code-reviewer.md</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-markdown">---
+name: code-reviewer
+description: Reviews code for security, performance, and style issues. Read-only — never writes files.
+tools:
+  - Read
+  - Glob
+  - Grep
+model: claude-sonnet-4-6
+isolation: none
+---
+
+# Code Reviewer
+
+You are a senior code reviewer. Your job is to find issues, not fix them.
+You have READ-ONLY access. Never suggest using Write or Edit.
+
+## Review Checklist
+1. Security: hardcoded secrets, SQL injection, unvalidated inputs, CORS misconfig
+2. Performance: N+1 queries, missing indexes, synchronous I/O in hot paths
+3. Types: any casts, missing null checks, uncaught promise rejections
+4. Style: naming consistency, dead code, missing error handling
+
+## Output Format
+For each issue found:
+- File: path/to/file.ts:lineNumber
+- Severity: CRITICAL / HIGH / MEDIUM / LOW
+- Issue: one-sentence description
+- Fix: concrete suggestion (do not implement it)</code></pre>
+            </div>
+          </div>
+
+          <!-- Example 5: settings.json power config -->
+          <div class="example-card" data-aos="fade-up">
+            <div class="example-card-header">
+              <div class="example-num">5</div>
+              <div class="example-title">settings.json — Power User Config</div>
+            </div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">json — ~/.claude/settings.json</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-json">{
+  "model": "claude-sonnet-4-6",
+  "autoCompact": true,
+  "statusLine": {
+    "show": ["model", "tokens", "cost"]
+  },
+  "env": {
+    "ANTHROPIC_SMALL_FAST_MODEL": "claude-haiku-4-5-20251001"
+  },
+  "agents": {
+    "parallel": true,
+    "maxConcurrent": 3
+  },
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(sudo rm*)",
+      "Bash(DROP TABLE*)",
+      "Bash(curl * | bash)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "echo "Session ended: $(date)" >> ~/claude-sessions.log"
+      }
+    ]
+  }
+}</code></pre>
+            </div>
+          </div>
+
+        </div><!-- /examples-grid -->
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ════════════════════════════════════════════════
+           NEWS FEED (existing section — kept intact)
+           ════════════════════════════════════════════════ -->
       <section class="section">
         <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">News Feed</span></div>
         <div class="updates-header" data-aos="fade-up">
           <h2 class="section-title" style="margin-bottom:0">Recent Developments</h2>
           <div class="live-badge">
             <span class="pulse-dot"></span>
-            Curated · March 2026
-          </div>
-        </div>
-
-        <!-- Weekly Digest -->
-        <div class="digest-box" data-aos="fade-up">
-          <div class="digest-title">📋 This Week's Highlights</div>
-          <div class="digest-items">
-            <div class="digest-item"><span class="digest-dot"></span>Claude Sonnet 4.5 released — new context editing and agent memory features, best SWE-bench scores yet</div>
-            <div class="digest-item"><span class="digest-dot"></span>VS Code extension surpassed 100k installs in its first week of availability</div>
-            <div class="digest-item"><span class="digest-dot"></span>Community benchmark: Claude Code leads on multi-file refactoring tasks vs Cursor and Copilot</div>
-            <div class="digest-item"><span class="digest-dot"></span>Security advisory issued for prompt injection via CSV/API data — updated defenses published</div>
-            <div class="digest-item"><span class="digest-dot"></span>Reddit thread: Multi-agent pipeline running 3 months with 94% auto-approval rate</div>
+            Curated &middot; March 2026
           </div>
         </div>
 
         <!-- Category Filter Bar -->
         <div class="filter-bar" data-aos="fade-up">
-          <button class="filter-btn active" data-filter="all">🌐 All</button>
-          <button class="filter-btn" data-filter="release">🚀 Releases</button>
-          <button class="filter-btn" data-filter="feature">✨ Features</button>
-          <button class="filter-btn" data-filter="update">🔄 Updates</button>
-          <button class="filter-btn" data-filter="security">🔒 Security</button>
-          <button class="filter-btn" data-filter="community">🎉 Community</button>
+          <button class="filter-btn active" data-filter="all">&#127758; All</button>
+          <button class="filter-btn" data-filter="release">&#128640; Releases</button>
+          <button class="filter-btn" data-filter="feature">&#10024; Features</button>
+          <button class="filter-btn" data-filter="update">&#128260; Updates</button>
+          <button class="filter-btn" data-filter="security">&#128274; Security</button>
+          <button class="filter-btn" data-filter="community">&#127881; Community</button>
+          <button class="filter-btn" data-filter="research">&#128196; Research</button>
         </div>
 
         <!-- Source Filter Bar -->
         <div class="filter-bar" style="margin-top:-16px;margin-bottom:24px" data-aos="fade-up">
           <span style="font-size:0.75rem;color:var(--text-muted);margin-right:4px;align-self:center">Source:</span>
           <button class="filter-btn active" data-source="all" style="font-size:0.75rem;padding:5px 12px">All Sources</button>
-          <button class="filter-btn" data-source="official" style="font-size:0.75rem;padding:5px 12px">🔵 Official</button>
-          <button class="filter-btn" data-source="reddit" style="font-size:0.75rem;padding:5px 12px">🟠 Reddit</button>
-          <button class="filter-btn" data-source="blog" style="font-size:0.75rem;padding:5px 12px">🟣 Blog</button>
-          <button class="filter-btn" data-source="community" style="font-size:0.75rem;padding:5px 12px">🟡 Community</button>
-          <button class="filter-btn" data-source="benchmark" style="font-size:0.75rem;padding:5px 12px">🟢 Benchmark</button>
+          <button class="filter-btn" data-source="official" style="font-size:0.75rem;padding:5px 12px">&#128309; Official</button>
+          <button class="filter-btn" data-source="reddit" style="font-size:0.75rem;padding:5px 12px">&#128992; Reddit</button>
+          <button class="filter-btn" data-source="arxiv" style="font-size:0.75rem;padding:5px 12px">&#128995; arXiv</button>
+          <button class="filter-btn" data-source="blog" style="font-size:0.75rem;padding:5px 12px">&#128995; Blog</button>
+          <button class="filter-btn" data-source="community" style="font-size:0.75rem;padding:5px 12px">&#128993; Community</button>
         </div>
 
         <!-- News Feed rendered by JS -->
         <div id="news-feed" class="news-feed">
-          <!-- Loading skeleton -->
           <div class="skeleton" style="height:90px;margin-bottom:16px"></div>
           <div class="skeleton" style="height:90px;margin-bottom:16px"></div>
           <div class="skeleton" style="height:90px;margin-bottom:16px"></div>
@@ -178,25 +595,25 @@
         <h2 class="section-title" data-aos="fade-up">Official Sources</h2>
         <div class="card-grid" data-aos="fade-up">
           <div class="card">
-            <span class="card-icon">📚</span>
+            <span class="card-icon">&#128218;</span>
             <div class="card-title">Official Docs</div>
             <div class="card-body">The authoritative source for all Claude Code features, API reference, and configuration.</div>
             <div style="margin-top:12px"><span class="badge badge-cyan">code.claude.com/docs</span></div>
           </div>
           <div class="card">
-            <span class="card-icon">🧪</span>
+            <span class="card-icon">&#129514;</span>
             <div class="card-title">Release Notes</div>
             <div class="card-body">Detailed changelogs for every version including breaking changes and migration guides.</div>
             <div style="margin-top:12px"><span class="badge badge-purple">platform.claude.com/release-notes</span></div>
           </div>
           <div class="card">
-            <span class="card-icon">🐙</span>
+            <span class="card-icon">&#128025;</span>
             <div class="card-title">GitHub Community</div>
             <div class="card-body">Community agents, skills, CLAUDE.md templates, and discussions.</div>
             <div style="margin-top:12px"><span class="badge badge-green">github.com/anthropics/claude-code</span></div>
           </div>
           <div class="card">
-            <span class="card-icon">📝</span>
+            <span class="card-icon">&#128221;</span>
             <div class="card-title">Anthropic Blog</div>
             <div class="card-body">In-depth technical posts about new capabilities and research behind Claude.</div>
             <div style="margin-top:12px"><span class="badge badge-orange">anthropic.com/news</span></div>
@@ -214,25 +631,28 @@
           This page is powered by <code>assets/data/updates.json</code>. To add a new update, simply add an entry to that file and redeploy.
         </p>
         <div class="code-block" data-aos="fade-up">
-          <div class="code-header"><span class="code-lang">json — full entry schema</span><button class="code-copy">Copy</button></div>
+          <div class="code-header"><span class="code-lang">json — research entry schema</span><button class="code-copy">Copy</button></div>
           <pre><code class="language-json">{
   "date": "2026-03-04",
-  "category": "feature",
-  "source": "community",
-  "sourceUrl": "https://reddit.com/r/ClaudeAI/...",
-  "readTime": "5 min",
-  "title": "Your Update Title",
-  "icon": "✨",
-  "excerpt": "Brief description shown in the card preview (1-2 sentences).",
-  "content": "Detailed HTML shown when 'Read more' is expanded. Supports &lt;code&gt; and &lt;strong&gt; tags."
+  "category": "research",
+  "source": "arxiv",
+  "sourceUrl": "https://arxiv.org/abs/...",
+  "arxivUrl": "https://arxiv.org/abs/...",
+  "readTime": "12 min",
+  "title": "Paper Title",
+  "icon": "&#128196;",
+  "authors": "Smith et al., MIT",
+  "abstract": "Full abstract text for the paper card.",
+  "excerpt": "One-line insight for the digest and news feed.",
+  "content": null
 }</code></pre>
         </div>
         <div class="callout callout-info" style="margin-top:16px" data-aos="fade-up">
-          <span class="callout-icon">💡</span>
+          <span class="callout-icon">&#128161;</span>
           <div>
-            <strong>Categories:</strong> <code>release</code>, <code>feature</code>, <code>update</code>, <code>security</code>, <code>community</code><br>
-            <strong>Sources:</strong> <code>official</code>, <code>reddit</code>, <code>blog</code>, <code>community</code>, <code>benchmark</code><br>
-            Both fields control badge colors and source filter buttons on this page.
+            <strong>Categories:</strong> <code>release</code>, <code>feature</code>, <code>update</code>, <code>security</code>, <code>community</code>, <code>research</code><br>
+            <strong>Sources:</strong> <code>official</code>, <code>reddit</code>, <code>arxiv</code>, <code>blog</code>, <code>community</code>, <code>benchmark</code><br>
+            Both fields control badge colours and source filter buttons on this page.
           </div>
         </div>
       </section>
