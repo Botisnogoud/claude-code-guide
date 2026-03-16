@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Cheat Sheet — Claude Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<button class="menu-toggle">☰</button>
+<div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">C</div>
+      <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Getting Started</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Get Started</a>
+      <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <div class="sidebar-daily" id="sd-setup">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
+          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-setup" class="sidebar-daily-content"><strong>Quick tip:</strong> Run <code>/init</code> in any project to auto-generate a CLAUDE.md from your codebase. Takes 30 seconds, saves hours.</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Core Features</div>
+      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
+      <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Permissions & Security</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> AI Agents</a>
+      <a href="tokens.html"><span class="nav-icon">💰</span> Costs & Tokens</a>
+      <a href="cookbook.html"><span class="nav-icon">🍳</span> Cookbook</a>
+      <a href="team.html"><span class="nav-icon">👥</span> Team Setup</a>
+      <a href="cheatsheet.html" class="active"><span class="nav-icon">📋</span> Cheat Sheet</a>
+      <div class="sidebar-daily" id="sd-practices">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
+          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-practices" class="sidebar-daily-content"><strong>Power move:</strong> Use <code>deny: ["Bash(rm -rf*)"]</code> in settings.json to block destructive commands at the permission layer — not just in CLAUDE.md.</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Stay Current</div>
+      <a href="updates.html"><span class="nav-icon">📰</span> Daily Digest</a>
+      <div class="sidebar-daily" id="sd-news">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
+          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-news" class="sidebar-daily-content"><strong>Latest:</strong> Claude 4.6 family is live — Opus 4.6 for reasoning, Sonnet 4.6 as Claude Code default. Set in <code>~/.claude/settings.json</code>.</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-badge">📋 Reference</div>
+      <h1 class="hero-title">Quick<br>Reference</h1>
+      <p class="hero-desc">Every command, setting, and shortcut — one page.</p>
+    </section>
+
+    <div class="content-area">
+
+      <!-- Slash Commands -->
+      <section class="section" id="slash-commands">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Commands</span></div>
+        <h2 class="section-title" data-aos="fade-up">Slash Commands</h2>
+        <p class="section-subtitle" data-aos="fade-up">All built-in slash commands available inside a Claude Code session.</p>
+
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>/help</code></td><td>Show available commands and keyboard shortcuts</td></tr>
+              <tr><td><code>/init</code></td><td>Scan the current repo and generate a CLAUDE.md file</td></tr>
+              <tr><td><code>/clear</code></td><td>Clear conversation history and reset context window</td></tr>
+              <tr><td><code>/compact</code></td><td>Summarise and compress conversation to save tokens</td></tr>
+              <tr><td><code>/status</code></td><td>Show current model, token usage, and session info</td></tr>
+              <tr><td><code>/cost</code></td><td>Display token cost breakdown for the current session</td></tr>
+              <tr><td><code>/model</code></td><td>Switch the active model mid-session</td></tr>
+              <tr><td><code>/agents</code></td><td>Open the agent manager: create, edit, delete sub-agents</td></tr>
+              <tr><td><code>/permissions</code></td><td>Review and modify tool permissions for this session</td></tr>
+              <tr><td><code>/config</code></td><td>View and edit the current settings.json configuration</td></tr>
+              <tr><td><code>/mcp</code></td><td>List and manage connected MCP servers</td></tr>
+              <tr><td><code>/doctor</code></td><td>Run a health check on Claude Code installation</td></tr>
+              <tr><td><code>/review</code></td><td>Start an interactive code review of staged or recent changes</td></tr>
+              <tr><td><code>/pr-comments</code></td><td>Fetch and respond to GitHub PR review comments</td></tr>
+              <tr><td><code>/memory</code></td><td>View and edit memory files (CLAUDE.md and user memory)</td></tr>
+              <tr><td><code>/logout</code></td><td>Log out of the current Anthropic account</td></tr>
+              <tr><td><code>/exit</code></td><td>Exit the Claude Code session</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info" style="margin-top:24px" data-aos="fade-up">
+          <span class="callout-icon">⌨️</span>
+          <div><strong>Keyboard shortcuts:</strong> <code>Ctrl+C</code> cancels the current operation. <code>Ctrl+R</code> retries the last prompt. <code>↑</code> / <code>↓</code> navigates prompt history. <code>Escape</code> exits the current tool call.</div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- settings.json Keys -->
+      <section class="section" id="settings">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Configuration</span></div>
+        <h2 class="section-title" data-aos="fade-up">settings.json Keys</h2>
+        <p class="section-subtitle" data-aos="fade-up">All supported keys in <code>~/.claude/settings.json</code> (user-level) or <code>.claude/settings.json</code> (project-level).</p>
+
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>model</code></td><td>string</td><td><code>"claude-sonnet-4-6"</code></td><td>Default model for all sessions</td></tr>
+              <tr><td><code>smallFastModel</code></td><td>string</td><td><code>"claude-haiku-4-5"</code></td><td>Model used for quick/cheap sub-tasks</td></tr>
+              <tr><td><code>theme</code></td><td>string</td><td><code>"dark"</code></td><td>UI theme: <code>"dark"</code>, <code>"light"</code>, <code>"system"</code></td></tr>
+              <tr><td><code>autoUpdates</code></td><td>boolean</td><td><code>true</code></td><td>Automatically install CLI updates</td></tr>
+              <tr><td><code>verbose</code></td><td>boolean</td><td><code>false</code></td><td>Show full tool call details in output</td></tr>
+              <tr><td><code>permissions.allow</code></td><td>string[]</td><td><code>[]</code></td><td>Tool patterns always allowed without prompting</td></tr>
+              <tr><td><code>permissions.deny</code></td><td>string[]</td><td><code>[]</code></td><td>Tool patterns always blocked</td></tr>
+              <tr><td><code>hooks</code></td><td>object</td><td><code>{}</code></td><td>Event hooks: PreToolUse, PostToolUse, etc.</td></tr>
+              <tr><td><code>env</code></td><td>object</td><td><code>{}</code></td><td>Environment variables injected into every session</td></tr>
+              <tr><td><code>apiKeyHelper</code></td><td>string</td><td>—</td><td>Shell command to fetch the API key dynamically</td></tr>
+              <tr><td><code>includeCoAuthoredBy</code></td><td>boolean</td><td><code>true</code></td><td>Add Co-Authored-By trailer to commits</td></tr>
+              <tr><td><code>preferredNotifChannel</code></td><td>string</td><td><code>"terminal"</code></td><td>Where to send long-task notifications</td></tr>
+              <tr><td><code>cleanupPeriodDays</code></td><td>number</td><td><code>30</code></td><td>Days before session transcripts are auto-deleted</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Example settings.json</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">json — ~/.claude/settings.json</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-json">{
+  "model": "claude-sonnet-4-6",
+  "smallFastModel": "claude-haiku-4-5",
+  "theme": "dark",
+  "verbose": false,
+  "permissions": {
+    "allow": ["Bash(git *)", "Bash(npm test*)"],
+    "deny":  ["Bash(rm -rf *)", "Bash(git push --force*)"]
+  },
+  "env": {
+    "NODE_ENV": "development"
+  }
+}</code></pre>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- CLAUDE.md Sections -->
+      <section class="section" id="claude-md">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Context Files</span></div>
+        <h2 class="section-title" data-aos="fade-up">CLAUDE.md Sections</h2>
+        <p class="section-subtitle" data-aos="fade-up">What to put in each section of your CLAUDE.md for maximum effectiveness.</p>
+
+        <div class="card-grid" data-aos="fade-up">
+          <div class="card">
+            <span class="card-icon">📌</span>
+            <div class="card-title">Project Overview</div>
+            <div class="card-body">1-2 paragraph description: what the project does, who uses it, and why it exists. Context for every session.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🛠️</span>
+            <div class="card-title">Tech Stack</div>
+            <div class="card-body">Language, framework, major libraries, Node/Python version, package manager. No guessing from package.json.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">▶️</span>
+            <div class="card-title">Commands</div>
+            <div class="card-body">Exact run, test, build, and deploy commands. Claude uses these verbatim — accuracy is critical.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">🗂️</span>
+            <div class="card-title">Architecture</div>
+            <div class="card-body">Annotated folder tree. Key files and their roles. Data flow for the main use case.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">✏️</span>
+            <div class="card-title">Code Style</div>
+            <div class="card-body">Naming conventions, import order, formatting rules, patterns to follow and patterns to avoid.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">⛔</span>
+            <div class="card-title">Never Do</div>
+            <div class="card-body">Explicit list of things Claude must never do: commit without permission, use specific deprecated APIs, etc.</div>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top:24px" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">markdown — CLAUDE.md skeleton</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-markdown"># Project Name
+
+## Overview
+[1-2 paragraphs: what, who, why]
+
+## Tech Stack
+- Language: TypeScript 5.4
+- Framework: Express 4.18
+- Database: PostgreSQL 15 (via Prisma ORM)
+- Test runner: Jest 29
+- Package manager: pnpm
+
+## Commands
+- Run: `pnpm dev`
+- Test: `pnpm test`
+- Build: `pnpm build`
+- Migrate DB: `pnpm db:migrate`
+
+## Architecture
+[annotated folder tree]
+
+## Code Style
+[naming, patterns, conventions]
+
+## Never Do
+- Never commit without explicit user instruction
+- Never use `any` type in TypeScript
+- Never run `pnpm db:migrate` without showing migration first</code></pre>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Hook Events -->
+      <section class="section" id="hooks">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Automation</span></div>
+        <h2 class="section-title" data-aos="fade-up">Hook Events</h2>
+        <p class="section-subtitle" data-aos="fade-up">Hooks let you run shell commands before or after Claude's tool calls — for logging, validation, notifications, and guardrails.</p>
+
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Event</th><th>Fires</th><th>Can block?</th><th>Common use</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>PreToolUse</code></td><td>Before any tool call executes</td><td>Yes (exit code ≠ 0)</td><td>Validate args, log audit trail, block dangerous commands</td></tr>
+              <tr><td><code>PostToolUse</code></td><td>After a tool call completes</td><td>No</td><td>Log results, trigger notifications, update dashboards</td></tr>
+              <tr><td><code>Notification</code></td><td>When Claude has a message for the user</td><td>No</td><td>Send Slack/Teams alert for long-running tasks</td></tr>
+              <tr><td><code>Stop</code></td><td>When Claude finishes a response</td><td>No</td><td>Cleanup, post-session reporting, metrics</td></tr>
+              <tr><td><code>SubagentStop</code></td><td>When a sub-agent completes</td><td>No</td><td>Log sub-agent output, chain workflows</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Hook configuration examples</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">json — settings.json hooks</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-json">{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/user/.claude/hooks/audit-bash.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-send 'Claude Code' '$CLAUDE_NOTIFICATION'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Session ended at $(date)\" >> ~/.claude/session.log"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top:24px" data-aos="fade-up">
+          <span class="callout-icon">🔴</span>
+          <div><strong>Blocking with PreToolUse:</strong> Your hook script must exit with code <code>0</code> to allow the tool call. Any non-zero exit code blocks it. Use <code>exit 1</code> with a message on stdout — Claude will see your message and explain to the user.</div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Permission Patterns -->
+      <section class="section" id="permissions">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Security</span></div>
+        <h2 class="section-title" data-aos="fade-up">Permission Patterns</h2>
+        <p class="section-subtitle" data-aos="fade-up">Allow/deny syntax for <code>permissions.allow</code> and <code>permissions.deny</code> in settings.json.</p>
+
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">json — common permission patterns</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-json">{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",              // All git subcommands
+      "Bash(npm test*)",          // npm test and variants
+      "Bash(npm run lint*)",      // npm run lint
+      "Bash(npx tsc*)",           // TypeScript compiler
+      "Read",                     // All file reads (always on)
+      "Write(src/**)",            // Write only inside src/
+      "Edit(src/**)"              // Edit only inside src/
+    ],
+    "deny": [
+      "Bash(rm -rf *)",           // Block recursive delete
+      "Bash(git push --force*)",  // Block force push
+      "Bash(git reset --hard*)",  // Block hard reset
+      "Bash(curl *)",             // Block arbitrary HTTP
+      "Bash(wget *)",             // Block wget downloads
+      "Write(.env*)",             // Block writing env files
+      "Write(*.key)",             // Block writing key files
+      "Write(secrets/**)"         // Block secrets directory
+    ]
+  }
+}</code></pre>
+        </div>
+
+        <div class="table-wrap" style="margin-top:24px" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Pattern syntax</th><th>Matches</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>Bash(git *)</code></td><td>Any bash command starting with <code>git </code></td></tr>
+              <tr><td><code>Bash(npm test*)</code></td><td><code>npm test</code>, <code>npm test:watch</code>, <code>npm test -- --coverage</code></td></tr>
+              <tr><td><code>Write(src/**)</code></td><td>Write calls to any path under <code>src/</code></td></tr>
+              <tr><td><code>Write(*.md)</code></td><td>Write calls to any .md file</td></tr>
+              <tr><td><code>Read</code></td><td>All Read tool calls (no path filter)</td></tr>
+              <tr><td><code>WebFetch(https://docs.example.com*)</code></td><td>Fetch calls to that domain only</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Model IDs -->
+      <section class="section" id="models">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Models</span></div>
+        <h2 class="section-title" data-aos="fade-up">Model IDs</h2>
+        <p class="section-subtitle" data-aos="fade-up">Current model identifiers for use in settings.json, agent frontmatter, and API calls.</p>
+
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Model ID</th><th>Tier</th><th>Best for</th><th>Speed</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>claude-opus-4-6</code></td><td>Flagship</td><td>Complex reasoning, architecture decisions, security analysis</td><td>Slower</td></tr>
+              <tr><td><code>claude-sonnet-4-6</code></td><td>Balanced</td><td>Daily coding, reviews, refactoring, test writing</td><td>Fast</td></tr>
+              <tr><td><code>claude-haiku-4-5</code></td><td>Fast</td><td>Simple edits, boilerplate, quick lookups, high-volume tasks</td><td>Fastest</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info" style="margin-top:24px" data-aos="fade-up">
+          <span class="callout-icon">💡</span>
+          <div><strong>Cost tip:</strong> Set <code>model</code> to <code>claude-sonnet-4-6</code> as default and only use <code>claude-opus-4-6</code> in agent frontmatter for tasks that genuinely need deeper reasoning. Haiku is ideal for <code>smallFastModel</code>.</div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Cost Reference -->
+      <section class="section" id="costs">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Costs</span></div>
+        <h2 class="section-title" data-aos="fade-up">Cost Reference</h2>
+        <p class="section-subtitle" data-aos="fade-up">Approximate token costs per task type to help budget your Claude Code usage.</p>
+
+        <div class="table-wrap" data-aos="fade-up">
+          <table>
+            <thead>
+              <tr><th>Task type</th><th>Typical tokens</th><th>Sonnet cost (approx.)</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Quick question / small edit</td><td>1K–5K</td><td>&lt;$0.01</td><td>Single file read + small write</td></tr>
+              <tr><td>Write a test suite (1 file)</td><td>5K–15K</td><td>$0.01–$0.04</td><td>Read source + write tests</td></tr>
+              <tr><td>Code review (small PR)</td><td>10K–30K</td><td>$0.03–$0.09</td><td>Reads diff + multiple files</td></tr>
+              <tr><td>Scaffold new feature</td><td>20K–60K</td><td>$0.06–$0.18</td><td>Reads patterns + writes files</td></tr>
+              <tr><td>Full codebase analysis</td><td>50K–200K</td><td>$0.15–$0.60</td><td>Glob + read many files</td></tr>
+              <tr><td>Multi-agent pipeline (4 agents)</td><td>100K–400K</td><td>$0.30–$1.20</td><td>Each agent has its own context</td></tr>
+              <tr><td>Large refactor (30+ files)</td><td>200K–600K</td><td>$0.60–$1.80</td><td>Reads all files + writes all files</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top:24px" data-aos="fade-up">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>These are estimates.</strong> Actual costs vary based on codebase size, number of tool calls, and how much conversation history accumulates. Use <code>/cost</code> in-session to see real numbers. Use <code>/compact</code> to reduce context when costs spike.</div>
+        </div>
+
+        <div class="card-grid" style="margin-top:24px" data-aos="fade-up">
+          <div class="card">
+            <span class="card-icon">💰</span>
+            <div class="card-title">Reduce costs</div>
+            <div class="card-body">Use <code>/compact</code> to compress long sessions. Use Haiku for simple sub-tasks. Avoid re-reading large files repeatedly — reference previous reads.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">📊</span>
+            <div class="card-title">Track spending</div>
+            <div class="card-body">Check <code>/cost</code> mid-session. Use Anthropic Console usage dashboard for daily/monthly totals per API key.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">⚡</span>
+            <div class="card-title">Max value</div>
+            <div class="card-body">Front-load context in CLAUDE.md so Claude doesn't re-explore. Targeted prompts with specific file paths cost far less than "look around the codebase".</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -21,41 +21,44 @@
       <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
     </div>
     <div class="sidebar-nav">
-      <div class="nav-label">Basic Setup</div>
-      <a href="index.html"><span class="nav-icon">🏠</span> Home & Setup</a>
+      <div class="nav-label">Getting Started</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Get Started</a>
       <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
       <div class="sidebar-daily" id="sd-setup">
         <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
           <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
         </div>
         <div class="sidebar-daily-body">
-          <div id="sd-tip-setup" class="sidebar-daily-content">Loading…</div>
+          <div id="sd-tip-setup" class="sidebar-daily-content"><strong>Quick tip:</strong> Run <code>/init</code> in any project to auto-generate a CLAUDE.md from your codebase. Takes 30 seconds, saves hours.</div>
         </div>
       </div>
 
-      <div class="nav-label">Best Practices</div>
+      <div class="nav-label">Core Features</div>
       <a href="claude-md.html" class="active"><span class="nav-icon">📄</span> CLAUDE.md</a>
       <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
-      <a href="security.html"><span class="nav-icon">🔒</span> Security Settings</a>
-      <a href="agents.html"><span class="nav-icon">🤖</span> Custom Agents</a>
-      <a href="tokens.html"><span class="nav-icon">💰</span> Token Optimization</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Permissions & Security</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> AI Agents</a>
+      <a href="tokens.html"><span class="nav-icon">💰</span> Costs & Tokens</a>
+      <a href="cookbook.html"><span class="nav-icon">🍳</span> Cookbook</a>
+      <a href="team.html"><span class="nav-icon">👥</span> Team Setup</a>
+      <a href="cheatsheet.html"><span class="nav-icon">📋</span> Cheat Sheet</a>
       <div class="sidebar-daily" id="sd-practices">
         <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
           <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
         </div>
         <div class="sidebar-daily-body">
-          <div id="sd-tip-practices" class="sidebar-daily-content">Loading…</div>
+          <div id="sd-tip-practices" class="sidebar-daily-content"><strong>Power move:</strong> Use <code>deny: ["Bash(rm -rf*)"]</code> in settings.json to block destructive commands at the permission layer — not just in CLAUDE.md.</div>
         </div>
       </div>
 
-      <div class="nav-label">News & Updates</div>
-      <a href="updates.html"><span class="nav-icon">📰</span> Daily Updates</a>
+      <div class="nav-label">Stay Current</div>
+      <a href="updates.html"><span class="nav-icon">📰</span> Daily Digest</a>
       <div class="sidebar-daily" id="sd-news">
         <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
           <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
         </div>
         <div class="sidebar-daily-body">
-          <div id="sd-tip-news" class="sidebar-daily-content">Loading…</div>
+          <div id="sd-tip-news" class="sidebar-daily-content"><strong>Latest:</strong> Claude 4.6 family is live — Opus 4.6 for reasoning, Sonnet 4.6 as Claude Code default. Set in <code>~/.claude/settings.json</code>.</div>
         </div>
       </div>
     </div>

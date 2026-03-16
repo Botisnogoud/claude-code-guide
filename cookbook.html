@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Cookbook — Claude Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<button class="menu-toggle">☰</button>
+<div class="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99"></div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">C</div>
+      <div><div class="brand-name">Claude Code</div><div class="brand-sub">Complete Guide</div></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-label">Getting Started</div>
+      <a href="index.html"><span class="nav-icon">🏠</span> Get Started</a>
+      <a href="github.html"><span class="nav-icon">🐙</span> GitHub Integration</a>
+      <div class="sidebar-daily" id="sd-setup">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-setup')">
+          <span>📅 Today's Tip</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-setup" class="sidebar-daily-content"><strong>Quick tip:</strong> Run <code>/init</code> in any project to auto-generate a CLAUDE.md from your codebase. Takes 30 seconds, saves hours.</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Core Features</div>
+      <a href="claude-md.html"><span class="nav-icon">📄</span> CLAUDE.md</a>
+      <a href="skills.html"><span class="nav-icon">⚡</span> Skills</a>
+      <a href="security.html"><span class="nav-icon">🔒</span> Permissions & Security</a>
+      <a href="agents.html"><span class="nav-icon">🤖</span> AI Agents</a>
+      <a href="tokens.html"><span class="nav-icon">💰</span> Costs & Tokens</a>
+      <a href="cookbook.html" class="active"><span class="nav-icon">🍳</span> Cookbook</a>
+      <a href="team.html"><span class="nav-icon">👥</span> Team Setup</a>
+      <a href="cheatsheet.html"><span class="nav-icon">📋</span> Cheat Sheet</a>
+      <div class="sidebar-daily" id="sd-practices">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-practices')">
+          <span>💡 Live Example</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-practices" class="sidebar-daily-content"><strong>Power move:</strong> Use <code>deny: ["Bash(rm -rf*)"]</code> in settings.json to block destructive commands at the permission layer — not just in CLAUDE.md.</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Stay Current</div>
+      <a href="updates.html"><span class="nav-icon">📰</span> Daily Digest</a>
+      <div class="sidebar-daily" id="sd-news">
+        <div class="sidebar-daily-header" onclick="toggleDaily('sd-news')">
+          <span>🔴 Live Feed</span><span class="sidebar-daily-chevron">▾</span>
+        </div>
+        <div class="sidebar-daily-body">
+          <div id="sd-tip-news" class="sidebar-daily-content"><strong>Latest:</strong> Claude 4.6 family is live — Opus 4.6 for reasoning, Sonnet 4.6 as Claude Code default. Set in <code>~/.claude/settings.json</code>.</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-badge">🍳 Recipes</div>
+      <h1 class="hero-title">Claude Code<br>Cookbook</h1>
+      <p class="hero-desc">Copy-paste recipes for the most common developer workflows. Find your task, grab the pattern, ship faster.</p>
+    </section>
+
+    <div class="content-area">
+
+      <!-- Starting a New Project -->
+      <section class="section" id="new-project">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 1</span></div>
+        <h2 class="section-title" data-aos="fade-up">Starting a New Project</h2>
+        <p class="section-subtitle" data-aos="fade-up">Bootstrap any new codebase with context, conventions, and a clean first commit — all in one pass.</p>
+
+        <div class="card-grid" data-aos="fade-up">
+          <div class="card">
+            <span class="card-icon">🚀</span>
+            <div class="card-title">Use when:</div>
+            <div class="card-body">Starting a greenfield project, onboarding into an existing repo for the first time, or resetting Claude's understanding of a codebase.</div>
+          </div>
+          <div class="card">
+            <span class="card-icon">⚡</span>
+            <div class="card-title">What you get:</div>
+            <div class="card-body">A populated CLAUDE.md, sensible .gitignore, initial project structure, and a first commit with clear conventions locked in.</div>
+          </div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: /init + CLAUDE.md bootstrap</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash — run inside project root</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude
+# Inside session:
+/init
+
+# Claude reads the repo and generates CLAUDE.md
+# Review it, then ask Claude to fill in gaps:
+"Update CLAUDE.md to include: stack details, test command,
+ deploy command, code style (ESLint config), and the
+ team's PR review checklist."</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> <code>/init</code> scans the repo and writes CLAUDE.md in one shot — every future session starts with full context instead of Claude having to re-explore.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: First commit pattern</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  1. Scaffold a TypeScript Express project in this directory:
+     - src/index.ts entry point
+     - src/routes/ directory
+     - src/middleware/ directory
+  2. Add ESLint + Prettier config matching Airbnb style
+  3. Add jest config for unit tests
+  4. Write a CLAUDE.md that documents: stack, run commands,
+     test command, folder structure, and coding conventions
+  Do NOT commit anything — show me what you've created first.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Explicit "do not commit" lets you inspect before accepting — Claude never auto-commits without permission.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Onboarding into an existing repo</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Read the entire codebase (use Glob and Read tools).
+  Then write a CLAUDE.md that covers:
+  - What this project does (1 paragraph)
+  - Tech stack and key dependencies
+  - How to run it locally
+  - How to run tests
+  - Folder structure (annotated tree)
+  - Architecture decisions worth knowing
+  - Known gotchas or non-obvious patterns
+  Save to CLAUDE.md in the project root.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Generates living documentation that Claude itself will use in all future sessions — every collaborator benefits too.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Code Review & PR -->
+      <section class="section" id="code-review">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 2</span></div>
+        <h2 class="section-title" data-aos="fade-up">Code Review &amp; PR</h2>
+        <p class="section-subtitle" data-aos="fade-up">Get a structured, actionable review of any PR or diff — faster and more consistent than waiting for a colleague.</p>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">💡</span>
+          <div><strong>Use when:</strong> You want a second opinion before merging, you're reviewing a PR from a teammate, or you want to catch issues before pushing.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: ReviewPR skill / agent</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash"># If you have a code-reviewer agent set up:
+claude "use the code-reviewer agent to review the changes
+        in the current branch vs main"
+
+# Or without an agent:
+claude "
+  Review the output of: git diff main...HEAD
+  Structure your review with:
+  - Critical issues (must fix)
+  - Warnings (should fix)
+  - Suggestions (nice to have)
+  - What's good
+  Cite file and line number for every finding.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Structured severity levels force actionable output — no vague "consider refactoring this" comments.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Multi-file diff analysis</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Read these files that changed in this PR:
+  - src/auth/middleware.ts
+  - src/auth/token.ts
+  - src/routes/user.ts
+  Focus on: security issues in auth flow, type safety,
+  missing error handling, and API contract consistency.
+  Cross-reference how changes interact across files.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Naming specific files focuses Claude on the change surface instead of re-reading the whole repo.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Bug Hunting -->
+      <section class="section" id="bug-hunting">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 3</span></div>
+        <h2 class="section-title" data-aos="fade-up">Bug Hunting</h2>
+        <p class="section-subtitle" data-aos="fade-up">Systematically isolate and diagnose bugs using parallel agents and git history analysis.</p>
+
+        <div class="callout callout-warning" data-aos="fade-up">
+          <span class="callout-icon">🐛</span>
+          <div><strong>Use when:</strong> A bug exists but the root cause is unknown, you need to bisect a regression, or multiple components could be responsible.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Parallel agents for diagnosis</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Bug: users randomly get logged out after 10 minutes.
+  Run these investigations in parallel using sub-agents:
+
+  Agent 1 — read src/auth/ and look for token expiry
+             logic, refresh token handling, and session config.
+
+  Agent 2 — run: git log --oneline --since='2 weeks ago'
+             and identify any auth-related commits.
+
+  Agent 3 — read src/middleware/session.ts and look
+             for any race conditions or missing error handling.
+
+  Synthesize findings and propose the 3 most likely root causes
+  with evidence from each agent's findings.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Parallel agents finish 3x faster than sequential investigation and avoid contaminating each other's analysis.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Git bisect pattern</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Help me bisect this regression.
+  - Bug: checkout flow breaks with 'undefined cart' error
+  - Last known good: commit abc1234 (2 weeks ago)
+  - Current broken: HEAD
+
+  Run: git log --oneline abc1234..HEAD
+  Then identify which commits touch src/cart/ or src/checkout/.
+  For each suspect commit, describe what changed and
+  why it might cause 'undefined cart'.
+  Rank suspects by likelihood.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Claude reads the commit history and correlates changes to the symptom — narrows bisect from 50 commits to 2-3 suspects in seconds.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Refactoring at Scale -->
+      <section class="section" id="refactoring">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 4</span></div>
+        <h2 class="section-title" data-aos="fade-up">Refactoring at Scale</h2>
+        <p class="section-subtitle" data-aos="fade-up">Use worktree isolation to refactor safely — changes stay isolated until you're ready to merge.</p>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">🌿</span>
+          <div><strong>Use when:</strong> Renaming across 30+ files, restructuring a module, or making a breaking API change that touches many call sites.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Worktree isolation for safe refactoring</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash"># Create isolated worktree for the refactor
+git worktree add ../my-project-refactor -b refactor/rename-user-to-account
+
+# Open Claude in the worktree
+cd ../my-project-refactor
+claude "
+  Rename all occurrences of 'User' → 'Account' across this codebase.
+  Rules:
+  - Rename TypeScript types, interfaces, class names, variable names
+  - Update import paths if files are renamed
+  - Do NOT rename in test fixture data or migration files
+  - After renaming, run: npx tsc --noEmit to check for type errors
+  Show me a summary of all files changed before writing anything.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Worktree keeps the refactor off your main branch — you can run tests, inspect, and merge only when confident.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Batch restructure with plan-first pattern</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  I want to restructure src/ from a flat layout to
+  feature-based folders.
+
+  Step 1: Read the current src/ structure with Glob.
+  Step 2: Propose the new folder structure — show me
+          the before/after mapping as a table.
+  Step 3: STOP and wait for my approval before moving
+          any files.
+
+  Do not touch anything until I say 'proceed'.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Plan-first with an explicit stop gate prevents Claude from restructuring 40 files in a direction you didn't intend.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Writing & Fixing Tests -->
+      <section class="section" id="tests">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 5</span></div>
+        <h2 class="section-title" data-aos="fade-up">Writing &amp; Fixing Tests</h2>
+        <p class="section-subtitle" data-aos="fade-up">Generate comprehensive test suites and fix flaky tests without touching production code.</p>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">🧪</span>
+          <div><strong>Use when:</strong> Coverage is too low, a new feature needs tests, or CI is failing due to flaky tests you need to diagnose.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Test-runner agent pattern</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Write unit tests for src/cart/cart.service.ts.
+  Before writing:
+  1. Read the file completely
+  2. Read jest.config.js for test setup
+  3. Read one existing test file to match the pattern
+
+  Then write tests covering:
+  - All public methods (happy path)
+  - Edge cases: empty cart, negative quantity, null item
+  - Error states: item not found, cart limit exceeded
+
+  After writing, run: npm test -- --testPathPattern=cart.service
+  and fix any failures before handing back to me.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Reading existing tests first ensures new tests match your project's exact patterns — no style mismatch to clean up.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Coverage analysis and gap fill</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Run: npm test -- --coverage --coverageReporters=text
+  Read the coverage output.
+  Identify the 5 files with lowest coverage that are
+  NOT in: migrations/, generated/, or vendor/.
+  For each file, write tests to bring coverage above 80%.
+  Run coverage again after each file to confirm improvement.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Targeting the lowest-coverage files gives maximum ROI per token spent — not random test generation.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Database Migrations -->
+      <section class="section" id="migrations">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 6</span></div>
+        <h2 class="section-title" data-aos="fade-up">Database Migrations</h2>
+        <p class="section-subtitle" data-aos="fade-up">Generate, review, and validate database migrations safely — with a mandatory human review step before execution.</p>
+
+        <div class="callout callout-warning" data-aos="fade-up">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Always include a review gate.</strong> Never let Claude execute migrations autonomously. Generate → review → execute manually.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Safe migration with review step</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  I need to add a 'last_login_at' timestamp column to
+  the users table.
+
+  1. Read existing migrations in db/migrations/ to match format
+  2. Generate the migration file (up + down)
+  3. Check if any TypeScript models reference the users table
+     and update them to include the new field
+  4. Show me everything you've created — DO NOT run the migration.
+
+  I will review and run: npm run db:migrate manually.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Explicit "do not run" + manual execution step ensures no accidental schema changes on a production-connected dev database.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Migration audit for rollback safety</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Read all migration files in db/migrations/.
+  For each migration that lacks a proper 'down' function,
+  list it with: filename, what the 'up' does, and what
+  a correct 'down' rollback should look like.
+  Do not modify any files — just give me the audit report.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Read-only audit finds rollback gaps before they become production incidents — no changes, just actionable findings.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- API Integration -->
+      <section class="section" id="api">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 7</span></div>
+        <h2 class="section-title" data-aos="fade-up">API Integration</h2>
+        <p class="section-subtitle" data-aos="fade-up">Scaffold new endpoints and API clients with full type safety — matching your existing patterns exactly.</p>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">🔌</span>
+          <div><strong>Use when:</strong> Adding a new REST endpoint, integrating a third-party API, or adding a new service client with proper error handling.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Scaffold new endpoint from existing pattern</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Add a PATCH /users/:id/preferences endpoint.
+  Before writing anything:
+  1. Read src/routes/users.ts — match its exact pattern
+  2. Read src/controllers/user.controller.ts — match its style
+  3. Read src/types/user.types.ts — extend types here
+
+  Then create:
+  - Route handler in src/routes/users.ts
+  - Controller method in src/controllers/user.controller.ts
+  - Request/response types in src/types/user.types.ts
+  - Unit test for the controller method
+
+  Follow all existing error handling patterns exactly.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Reading existing patterns first guarantees the new endpoint is indistinguishable from hand-written code — no style cleanup needed.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Third-party API client with types</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Integrate the Stripe API for subscription billing.
+  1. Read package.json — check if stripe SDK is already installed
+  2. Create src/services/stripe.service.ts with:
+     - Full TypeScript types for all request/response shapes
+     - createSubscription, cancelSubscription, getInvoices methods
+     - Proper error handling (StripeError types)
+     - Unit tests with mocked stripe calls
+  3. Add STRIPE_SECRET_KEY to .env.example (not .env)
+  Do not hardcode any credentials.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Explicit "add to .env.example not .env" prevents accidental credential commits — a common pitfall when Claude scaffolds integrations.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Security Audit -->
+      <section class="section" id="security">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 8</span></div>
+        <h2 class="section-title" data-aos="fade-up">Security Audit</h2>
+        <p class="section-subtitle" data-aos="fade-up">Run a read-only security scan to find vulnerabilities without touching a line of production code.</p>
+
+        <div class="callout callout-warning" data-aos="fade-up">
+          <span class="callout-icon">🔒</span>
+          <div><strong>Use when:</strong> Before a major release, after adding new dependencies, or when integrating user-generated input into a new part of the system.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Read-only security scan agent</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Perform a security audit. You are in READ-ONLY mode —
+  do not modify any files.
+
+  Check for:
+  1. Hardcoded secrets, API keys, or passwords (grep for common patterns)
+  2. SQL injection risks (raw query construction)
+  3. XSS vulnerabilities (unescaped user input rendered in HTML)
+  4. Missing input validation on API endpoints
+  5. Insecure direct object references (IDOR)
+  6. Run: npm audit and report HIGH/CRITICAL findings
+
+  Output: severity-sorted findings with file, line, description,
+  and a specific remediation for each.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Explicit read-only constraint prevents Claude from "fixing" vulnerabilities before you've reviewed them — audit first, fix second.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Dependency vulnerability check</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Run: npm audit --json
+  Parse the output and:
+  1. List all CRITICAL and HIGH vulnerabilities
+  2. For each: package name, CVE, what it allows an attacker to do,
+     and the safe version to upgrade to
+  3. Check if any vulnerable packages are in our direct dependencies
+     (not just transitive) by reading package.json
+  4. Propose the minimal set of version bumps to fix all criticals
+  Do not run npm install — just give me the upgrade plan.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Audit-then-plan pattern gives you a reviewable upgrade list — you stay in control of which deps get bumped.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Documentation Generation -->
+      <section class="section" id="docs">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 9</span></div>
+        <h2 class="section-title" data-aos="fade-up">Documentation Generation</h2>
+        <p class="section-subtitle" data-aos="fade-up">Generate accurate, up-to-date documentation by letting Claude read the actual code — not guess from summaries.</p>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">📝</span>
+          <div><strong>Use when:</strong> README is stale, JSDoc comments are missing, or you need an API reference for a new service before launch.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Doc-writer skill pattern</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Use the doc-writer agent to update README.md.
+  The README should include:
+  - Project description (what it does, who it's for)
+  - Prerequisites and installation (exact commands)
+  - Quick start (working in under 5 minutes)
+  - Environment variables table (name, required, default, description)
+  - API reference (auto-generated from src/routes/)
+  - Contributing guide
+
+  Read the actual source code — do not make up API endpoints.
+  Preserve any existing sections that are still accurate.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> "Read the actual source" instruction prevents hallucinated endpoint docs — a common failure mode for LLM documentation.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: JSDoc for all public functions</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Add JSDoc comments to all exported functions in src/services/.
+  For each function:
+  - @param with type and description for every parameter
+  - @returns with type and description
+  - @throws for any errors thrown
+  - @example with a realistic usage example
+
+  Read each file first, then add comments inline.
+  Do not change any logic — comments only.
+  Run: npx tsc --noEmit after to confirm no type errors introduced.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> "Comments only, no logic changes" + TypeScript compile check prevents documentation from accidentally mutating behaviour.</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Team Onboarding -->
+      <section class="section" id="onboarding">
+        <div class="section-eyebrow" data-aos="fade-up"><div class="eyebrow-line"></div><span class="eyebrow-text">Recipe 10</span></div>
+        <h2 class="section-title" data-aos="fade-up">Team Onboarding</h2>
+        <p class="section-subtitle" data-aos="fade-up">Give every new team member instant productivity by sharing CLAUDE.md and skills via the repo.</p>
+
+        <div class="callout callout-info" data-aos="fade-up">
+          <span class="callout-icon">👥</span>
+          <div><strong>Use when:</strong> Onboarding a new engineer, sharing Claude workflows across your team, or standardising how your team uses Claude Code.</div>
+        </div>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Shared CLAUDE.md + shared skills setup</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash"># Commit both CLAUDE.md and .claude/ to the repo
+git add CLAUDE.md .claude/
+git commit -m "chore: add Claude Code team configuration"
+
+# New team member gets everything on clone:
+git clone https://github.com/your-org/your-repo
+cd your-repo
+claude  # CLAUDE.md + all agents + all skills load automatically</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> Claude loads CLAUDE.md and .claude/ automatically on session start — zero setup for new team members.</p>
+
+        <h3 style="margin:28px 0 12px;color:var(--text-primary);font-size:1.05rem" data-aos="fade-up">Recipe: Generate team onboarding doc for Claude</h3>
+        <div class="code-block" data-aos="fade-up">
+          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-bash">claude "
+  Read the codebase and write a CLAUDE.md optimised for
+  onboarding a new engineer joining our team.
+  Include:
+  - What the project does (for someone with zero context)
+  - Development environment setup (step by step)
+  - The 3 most common tasks and how to do them with Claude
+  - Which agents/skills we have and when to use each
+  - Team conventions (branching, PR titles, commit format)
+  - Things Claude should NEVER do in this project
+  Save to CLAUDE.md.
+"</code></pre>
+        </div>
+        <p class="section-subtitle" style="font-size:0.9rem;margin-top:8px" data-aos="fade-up"><strong>Why this works:</strong> A CLAUDE.md written for a new engineer also perfectly primes Claude — clear context, explicit constraints, workflow instructions.</p>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

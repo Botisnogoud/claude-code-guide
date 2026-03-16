@@ -31,7 +31,6 @@ const CONFIG = {
     'claude-updater.log'
   ),
   redditUrl:    'https://www.reddit.com/r/ClaudeAI/search.json?q=claude+code&sort=new&t=day&limit=10',
-  anthropicRss: 'https://www.anthropic.com/rss.xml',
   arxivUrl:     'https://export.arxiv.org/api/query?search_query=ti:llm+agent+OR+ti:claude+OR+ti:language+model+tool&sortBy=submittedDate&sortOrder=descending&max_results=5',
   maxPerCategory: 5,
   deployExts: new Set(['.html', '.css', '.js', '.json', '.txt', '.toml', '.ico', '.png', '.jpg', '.svg', '.webp']),
@@ -355,17 +354,6 @@ async function main() {
     newItems.push(...posts);
   } catch (e) {
     log(`ERROR: Reddit fetch failed \u2014 ${e.message}`);
-  }
-
-  // Fetch Anthropic RSS
-  log('Fetching Anthropic RSS feed\u2026');
-  try {
-    const body  = await fetchUrl(CONFIG.anthropicRss);
-    const posts = parseRssFeed(body);
-    log(`RSS: found ${posts.length} items`);
-    newItems.push(...posts);
-  } catch (e) {
-    log(`ERROR: RSS fetch failed \u2014 ${e.message}`);
   }
 
   // Fetch arXiv papers
